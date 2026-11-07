@@ -11,8 +11,9 @@ export async function GET() {
     .single();
 
   if (error) {
+    console.error("[public/stock] Supabase error:", error.code, error.message);
     return NextResponse.json(
-      { error: "Gagal mengambil stok" },
+      { error: "Stok belum tersedia. Pastikan database Supabase sudah disiapkan." },
       { status: 500 }
     );
   }
