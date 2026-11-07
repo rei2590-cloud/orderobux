@@ -1,16 +1,12 @@
-
 import { NextResponse } from "next/server";
-import { isAdmin } from "@/lib/adminAuth";
+import isAdmin from "@/lib/adminAuth";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   if (!(await isAdmin())) {
-    return NextResponse.json(
-      { error: "Tidak diizinkan" },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: "Tidak diizinkan" }, { status: 401 });
   }
 
   const { data, error } = await supabaseAdmin
@@ -20,10 +16,7 @@ export async function GET() {
     .limit(100);
 
   if (error) {
-    return NextResponse.json(
-      { error: "Gagal mengambil pesanan" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Gagal mengambil pesanan" }, { status: 500 });
   }
 
   return NextResponse.json(
