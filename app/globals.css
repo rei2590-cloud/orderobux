@@ -1,15 +1,683 @@
 
-import "./globals.css";
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap');
 
-export const metadata = {
-  title: "REI ROBUX | Gaming Store",
-  description: "Your next Roblox adventure starts here!",
-};
+:root {
+  --blue: #1769e0;
+  --dark-blue: #1047a3;
+  --yellow: #ffd43b;
+  --dark: #172b4d;
+  --light: #f3f7ff;
+  --white: #ffffff;
+}
 
-export default function RootLayout({ children }) {
-  return (
-    <html lang="id">
-      <body>{children}</body>
-    </html>
-  );
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--light);
+  color: var(--dark);
+  font-family: 'Nunito', sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.navbar {
+  height: 76px;
+  padding: 0 8%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border-bottom: 3px solid var(--yellow);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dark);
+  text-decoration: none;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.brand > span:last-child {
+  color: var(--blue);
+  margin-left: -7px;
+}
+
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: var(--yellow);
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  color: var(--dark-blue);
+  box-shadow: 3px 3px 0 var(--dark-blue);
+}
+
+.nav-status {
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: var(--blue);
+}
+
+.nav-status i {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background: #27c777;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.hero {
+  min-height: 490px;
+  padding: 70px 10%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--blue);
+  color: white;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-content {
+  max-width: 520px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-tag,
+.section-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--yellow);
+}
+
+.hero h1 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(55px, 7vw, 88px);
+  line-height: .98;
+  margin: 18px 0;
+  font-weight: 700;
+}
+
+.hero h1 span {
+  color: var(--yellow);
+}
+
+.hero-content p {
+  max-width: 420px;
+  line-height: 1.8;
+  color: #e5efff;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.hero-button {
+  display: inline-flex;
+  gap: 25px;
+  align-items: center;
+  margin-top: 28px;
+  padding: 15px 23px;
+  background: var(--yellow);
+  color: var(--dark-blue);
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 900;
+  box-shadow: 0 5px 0 #c99e15;
+  transition: .2s;
+}
+
+.hero-button:hover {
+  transform: translateY(-3px);
+}
+
+.hero-art {
+  width: 340px;
+  height: 340px;
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.art-circle {
+  position: absolute;
+  width: 290px;
+  height: 290px;
+  border-radius: 50%;
+  background: var(--yellow);
+  border: 8px solid rgba(255,255,255,.35);
+}
+
+.roblox-card {
+  width: 175px;
+  height: 215px;
+  background: white;
+  border-radius: 25px;
+  border: 6px solid var(--dark-blue);
+  box-shadow: 12px 12px 0 rgba(0,0,0,.15);
+  position: relative;
+  z-index: 1;
+  transform: rotate(-7deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 35px;
+}
+
+.roblox-face {
+  color: var(--dark);
+  font-size: 29px;
+  font-weight: 900;
+  letter-spacing: 13px;
+  margin-left: 12px;
+}
+
+.roblox-mouth {
+  font-size: 29px;
+  font-weight: 900;
+  color: var(--dark);
+}
+
+.roblox-body {
+  position: absolute;
+  bottom: -8px;
+  width: 105px;
+  height: 85px;
+  border-radius: 17px 17px 12px 12px;
+  background: var(--blue);
+  color: white;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 38px;
+  display: grid;
+  place-items: center;
+  border: 5px solid var(--dark-blue);
+}
+
+.floating-coin {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: white;
+  color: var(--blue);
+  font-family: 'Fredoka', sans-serif;
+  font-size: 25px;
+  font-weight: 700;
+  box-shadow: 5px 5px 0 var(--dark-blue);
+}
+
+.coin-one {
+  top: 25px;
+  right: 12px;
+  transform: rotate(12deg);
+}
+
+.coin-two {
+  bottom: 20px;
+  left: 5px;
+  transform: rotate(-12deg);
+  color: #e4a900;
+}
+
+.floating-label {
+  position: absolute;
+  bottom: 30px;
+  right: 0;
+  background: var(--yellow);
+  color: var(--dark-blue);
+  padding: 8px 14px;
+  font-weight: 900;
+  border-radius: 8px;
+  transform: rotate(5deg);
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  padding: 28px 10%;
+  background: white;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.feature > span {
+  font-size: 28px;
+}
+
+.feature strong,
+.feature small {
+  display: block;
+}
+
+.feature strong {
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.feature small {
+  color: #8190a9;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.order-section,
+.how-section {
+  padding: 85px 10%;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-label {
+  color: var(--blue);
+}
+
+.section-heading h2 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(32px, 5vw, 45px);
+  margin: 10px 0;
+}
+
+.section-heading h2 span {
+  color: var(--blue);
+}
+
+.section-heading p {
+  color: #8190a9;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.order-layout {
+  display: grid;
+  grid-template-columns: 1.3fr .8fr;
+  gap: 25px;
+  align-items: start;
+}
+
+.package-panel,
+.summary-panel {
+  background: white;
+  border: 2px solid #e4ebf7;
+  border-radius: 18px;
+  padding: 27px;
+  box-shadow: 0 8px 25px rgba(20,60,120,.05);
+}
+
+.package-panel h3,
+.summary-panel h3 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 20px;
+  margin-bottom: 22px;
+}
+
+.package-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.package-card {
+  min-width: 0;
+  padding: 17px 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  background: #f6f9ff;
+  border: 2px solid #e5ecf8;
+  border-radius: 13px;
+  color: var(--dark);
+  transition: .2s;
+}
+
+.package-card:hover {
+  border-color: var(--blue);
+  transform: translateY(-3px);
+}
+
+.package-card.active {
+  border: 2px solid var(--blue);
+  background: #eaf2ff;
+  box-shadow: 0 0 0 3px #d5e5ff;
+}
+
+.package-coin {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: var(--yellow);
+  display: grid;
+  place-items: center;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  color: var(--dark-blue);
+}
+
+.package-card strong {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 21px;
+}
+
+.package-card small {
+  font-size: 10px;
+  font-weight: 900;
+  color: #8190a9;
+}
+
+.package-card b {
+  font-size: 12px;
+  color: var(--blue);
+}
+
+.custom-box {
+  margin-top: 25px;
+  padding: 18px;
+  background: #fff9df;
+  border: 1px dashed #e7bd30;
+  border-radius: 12px;
+}
+
+.custom-box label,
+.summary-panel label {
+  display: block;
+  font-size: 11px;
+  font-weight: 900;
+  margin-bottom: 9px;
+}
+
+.custom-input {
+  display: flex;
+  gap: 8px;
+}
+
+.custom-input input,
+.summary-panel input,
+.summary-panel select {
+  width: 100%;
+  min-width: 0;
+  border: 2px solid #e5ecf8;
+  background: #f8faff;
+  padding: 12px;
+  border-radius: 9px;
+  outline: none;
+  color: var(--dark);
+}
+
+.custom-input input:focus,
+.summary-panel input:focus,
+.summary-panel select:focus {
+  border-color: var(--blue);
+}
+
+.custom-input button {
+  padding: 0 18px;
+  border: 0;
+  border-radius: 9px;
+  background: var(--dark-blue);
+  color: white;
+  font-weight: 900;
+}
+
+.custom-box > small {
+  display: block;
+  margin-top: 9px;
+  font-size: 11px;
+  color: #9a7b16;
+}
+
+.summary-panel label {
+  margin-top: 18px;
+}
+
+.summary-panel input,
+.summary-panel select {
+  font-size: 13px;
+}
+
+.summary-detail {
+  margin-top: 25px;
+  padding: 17px 0;
+  border-top: 1px dashed #dce5f2;
+  border-bottom: 1px dashed #dce5f2;
+}
+
+.summary-detail div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 8px 0;
+  font-size: 12px;
+}
+
+.summary-detail span {
+  color: #8190a9;
+  font-weight: 700;
+}
+
+.summary-detail strong {
+  text-align: right;
+}
+
+.total-price {
+  padding: 20px 0;
+}
+
+.total-price span,
+.total-price strong {
+  display: block;
+}
+
+.total-price span {
+  color: #8190a9;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.total-price strong {
+  color: var(--blue);
+  font-family: 'Fredoka', sans-serif;
+  font-size: 30px;
+  margin-top: 5px;
+}
+
+.order-button {
+  width: 100%;
+  padding: 16px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--yellow);
+  color: var(--dark-blue);
+  font-weight: 900;
+  box-shadow: 0 4px 0 #d6aa1c;
+  transition: .2s;
+}
+
+.order-button:hover {
+  transform: translateY(-2px);
+}
+
+.order-button span {
+  margin-left: 10px;
+}
+
+.secure-note {
+  text-align: center;
+  color: #8190a9;
+  font-size: 10px;
+  margin-top: 15px;
+}
+
+.how-section {
+  background: white;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.step {
+  position: relative;
+  padding: 28px 20px;
+  border: 2px solid #e8eef8;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.step > b {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 25px;
+  color: #e6edf8;
+}
+
+.step > span {
+  font-size: 36px;
+}
+
+.step h3 {
+  font-family: 'Fredoka', sans-serif;
+  margin: 12px 0 7px;
+}
+
+.step p {
+  color: #8190a9;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+footer {
+  padding: 30px 10%;
+  background: var(--dark-blue);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+footer .brand {
+  color: white;
+}
+
+footer p {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 800px) {
+  .hero {
+    padding: 60px 7%;
+  }
+
+  .hero-art {
+    transform: scale(.8);
+    margin-right: -30px;
+  }
+
+  .order-section,
+  .how-section {
+    padding: 65px 6%;
+  }
+
+  .order-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .features {
+    padding: 25px 5%;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    padding: 0 5%;
+    height: 65px;
+  }
+
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 55px 7% 20px;
+  }
+
+  .hero-content p {
+    margin: auto;
+  }
+
+  .hero-art {
+    margin: 10px auto 0;
+    transform: scale(.85);
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .feature {
+    justify-content: flex-start;
+    max-width: 220px;
+    margin: auto;
+    width: 100%;
+  }
+
+  .package-panel,
+  .summary-panel {
+    padding: 18px;
+  }
+
+  .package-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  footer {
+    flex-direction: column;
+    text-align: center;
+  }
 }
