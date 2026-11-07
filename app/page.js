@@ -4,320 +4,248 @@
 import { useState } from "react";
 
 const RATE = 15500;
-const WHATSAPP = "628XXXXXXXXXX"; // GANTI NOMOR ADMIN
+const WHATSAPP = "628XXXXXXXXXX";
 
-const packages = [
-  { amount: 50, icon: "🕹️", name: "MINI PLAYER" },
-  { amount: 100, icon: "⭐", name: "STARTER PACK" },
-  { amount: 200, icon: "👾", name: "PLAYER PACK" },
-  { amount: 300, icon: "⚡", name: "POWER UP" },
-  { amount: 500, icon: "🏆", name: "PRO PLAYER" },
-  { amount: 1000, icon: "💎", name: "MEGA PLAYER" },
-];
-
-const rupiah = (number) =>
-  new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    maximumFractionDigits: 0,
-  }).format(number);
-
-const getPrice = (amount) => Math.ceil((amount / 100) * RATE);
+const packages = [50, 100, 200, 300, 500, 1000];
 
 export default function Home() {
-  const [selected, setSelected] = useState(100);
-  const [custom, setCustom] = useState(150);
+  const [amount, setAmount] = useState(100);
   const [username, setUsername] = useState("");
   const [method, setMethod] = useState("Game Pass");
-  const [agree, setAgree] = useState(false);
+  const [custom, setCustom] = useState("");
 
-  const order = () => {
-    const message = `HALO REI ROBUX!
+  const price = Math.ceil((amount / 100) * RATE);
 
-Username: ${username}
-Robux: ${selected}
-Metode: ${method}
-Total: ${rupiah(getPrice(selected))}
+  function selectAmount(value) {
+    setAmount(value);
+    setCustom("");
+  }
 
-Saya ingin melakukan pemesanan. Terima kasih!`;
+  function orderNow() {
+    if (!username.trim()) {
+      alert("Masukkan username Roblox kamu terlebih dahulu!");
+      return;
+    }
+
+    if (WHATSAPP === "628XXXXXXXXXX") {
+      alert("Nomor WhatsApp admin belum diatur!");
+      return;
+    }
+
+    const message =
+      `HALO ADMIN REI ROBUX!\n\n` +
+      `Username Roblox: ${username}\n` +
+      `Jumlah Robux: ${amount} R$\n` +
+      `Metode: ${method}\n` +
+      `Total Harga: Rp${price.toLocaleString("id-ID")}\n\n` +
+      `Saya ingin melakukan pemesanan.`;
 
     window.open(
       `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`,
       "_blank"
     );
-  };
+  }
 
   return (
     <main>
-      <div className="announcement">
-        ★ WELCOME TO REI ROBUX ★ YOUR NEXT ADVENTURE STARTS HERE!
-      </div>
-
-      <header className="navbar">
-        <a href="#" className="logo">
-          <span className="logo-icon">R</span>
-          <span>REI<span className="blue-text">ROBux</span>
-            <small>PLAYER SUPPLY STORE</small>
-          </span>
+      <nav className="navbar">
+        <a href="#" className="brand">
+          <span className="brand-icon">R</span>
+          REI<span>ROBUX</span>
         </a>
-
-        <nav>
-          <a href="#packages">PACKAGES</a>
-          <a href="#custom">CUSTOM</a>
-          <a href="#order">ORDER</a>
-        </nav>
-
-        <a href="#packages" className="nav-button">LET'S PLAY ↗</a>
-      </header>
+        <span className="nav-status">
+          <i></i> ROBUX STORE
+        </span>
+      </nav>
 
       <section className="hero">
         <div className="hero-content">
-          <span className="eyebrow">🎮 PLAYER 001 HAS ENTERED</span>
-
+          <div className="hero-tag">★ YOUR ROBLOX PARTNER ★</div>
           <h1>
-            READY TO
+            LEVEL UP
             <br />
-            <span>POWER UP?</span>
+            YOUR <span>GAME!</span>
           </h1>
-
           <p>
-            Your Roblox adventure starts here!
-            Choose your Robux, place your order,
-            and get ready to play.
+            Saatnya upgrade pengalaman bermain Roblox kamu.
+            Pesan Robux dengan mudah di REI ROBUX!
           </p>
-
-          <div className="hero-buttons">
-            <a href="#packages" className="main-button">
-              EXPLORE PACKAGES →
-            </a>
-            <a href="#how" className="secondary-button">
-              HOW IT WORKS ↗
-            </a>
-          </div>
-
-          <div className="hero-info">
-            <span>01 PICK A PACK</span>
-            <span>02 PLACE ORDER</span>
-            <span>03 HAVE FUN</span>
-          </div>
+          <a href="#order" className="hero-button">
+            ORDER NOW <span>→</span>
+          </a>
         </div>
 
-        <div className="hero-visual">
-          <div className="decor decor-one">✦</div>
-          <div className="game-card">
-            <div className="game-top">
-              <span>REI ARCADE</span>
-              <span>● ● ●</span>
-            </div>
-            <div className="game-character">👾</div>
-            <h2>GAME<br />ON!</h2>
-            <div className="game-bottom">
-              INSERT FUN HERE ★
-            </div>
+        <div className="hero-art">
+          <div className="art-circle"></div>
+          <div className="roblox-card">
+            <div className="roblox-face">◉ ◉</div>
+            <div className="roblox-mouth">▱</div>
+            <div className="roblox-body">R$</div>
           </div>
-          <div className="floating floating-one">+100 R$</div>
-          <div className="floating floating-two">LEVEL UP!</div>
-          <div className="decor decor-two">★</div>
+          <div className="floating-coin coin-one">R$</div>
+          <div className="floating-coin coin-two">★</div>
+          <div className="floating-label">GAME ON!</div>
         </div>
       </section>
-
-      <div className="ticker">
-        ★ ROBUX TIME ★ HAPPY GAMING ★ LET'S PLAY ★ ROBUX TIME ★
-      </div>
 
       <section className="features">
-        <div>⚡ <span><b>QUICK ORDER</b><small>Easy ordering</small></span></div>
-        <div>🎮 <span><b>GAMER STYLE</b><small>Made for players</small></span></div>
-        <div>💬 <span><b>CHAT SUPPORT</b><small>Contact our admin</small></span></div>
+        <div className="feature">
+          <span>⚡</span>
+          <div>
+            <strong>FAST ORDER</strong>
+            <small>Pemesanan mudah</small>
+          </div>
+        </div>
+        <div className="feature">
+          <span>🎮</span>
+          <div>
+            <strong>ROBLOX READY</strong>
+            <small>Untuk petualanganmu</small>
+          </div>
+        </div>
+        <div className="feature">
+          <span>💬</span>
+          <div>
+            <strong>CHAT ADMIN</strong>
+            <small>Hubungi admin langsung</small>
+          </div>
+        </div>
       </section>
 
-      <section className="section" id="packages">
+      <section className="order-section" id="order">
         <div className="section-heading">
-          <div>
-            <span className="section-label">CHOOSE YOUR POWER-UP</span>
-            <h2>PLAYER <span>PACKAGES</span></h2>
-          </div>
-          <p>Pick your favorite Robux package!</p>
-        </div>
-
-        <div className="package-grid">
-          {packages.map((item) => (
-            <button
-              key={item.amount}
-              className={`package-card ${
-                selected === item.amount ? "active" : ""
-              }`}
-              onClick={() => setSelected(item.amount)}
-            >
-              <span className="package-icon">{item.icon}</span>
-              <span className="package-name">{item.name}</span>
-              <strong>{item.amount.toLocaleString("id-ID")}</strong>
-              <span className="robux-label">ROBUX</span>
-              <span className="package-price">
-                {rupiah(getPrice(item.amount))}
-              </span>
-              <span className="choose-label">
-                {selected === item.amount ? "✓ SELECTED" : "SELECT PACK →"}
-              </span>
-            </button>
-          ))}
-        </div>
-
-        <div className="selected-box">
-          <div>
-            <small>YOUR PACKAGE</small>
-            <b>{selected.toLocaleString("id-ID")} ROBUX</b>
-          </div>
-          <div>
-            <small>ESTIMATED PRICE</small>
-            <b>{rupiah(getPrice(selected))}</b>
-          </div>
-          <a href="#order" className="main-button">CONTINUE →</a>
-        </div>
-      </section>
-
-      <section className="custom-section" id="custom">
-        <div>
-          <span className="section-label">MAKE YOUR OWN PACKAGE</span>
-          <h2>BUILD YOUR<br /><span>OWN PACK!</span></h2>
-          <p>
-            Can't find your favorite package?
-            Create your own Robux amount!
-          </p>
-          <div className="rate">CURRENT RATE: Rp15.500 / 100 ROBUX</div>
-        </div>
-
-        <div className="calculator">
-          <label>HOW MANY ROBUX?</label>
-          <div className="counter">
-            <button onClick={() => setCustom(Math.max(50, custom - 50))}>−</button>
-            <input
-              type="number"
-              min="50"
-              value={custom}
-              onChange={(e) => setCustom(Math.max(0, Number(e.target.value)))}
-            />
-            <button onClick={() => setCustom(custom + 50)}>+</button>
-          </div>
-
-          <div className="total">
-            <small>ESTIMATED TOTAL</small>
-            <strong>{rupiah(getPrice(custom))}</strong>
-          </div>
-
-          <button
-            className="main-button full"
-            onClick={() => {
-              setSelected(Math.max(50, custom));
-              document.getElementById("order").scrollIntoView({
-                behavior: "smooth",
-              });
-            }}
-          >
-            USE THIS AMOUNT →
-          </button>
-        </div>
-      </section>
-
-      <section className="section order-section" id="order">
-        <div className="section-heading">
-          <div>
-            <span className="section-label">ALMOST IN THE GAME</span>
-            <h2>PLACE YOUR <span>ORDER</span></h2>
-          </div>
-          <p>Fill in your Roblox details.</p>
+          <span className="section-label">LET'S GET STARTED</span>
+          <h2>CHOOSE YOUR <span>ROBUX</span></h2>
+          <p>Pilih jumlah Robux yang kamu inginkan.</p>
         </div>
 
         <div className="order-layout">
-          <div className="order-form">
-            <label>ROBLOX USERNAME</label>
+          <div className="package-panel">
+            <h3>★ PILIH PAKET</h3>
+            <div className="package-grid">
+              {packages.map((item) => (
+                <button
+                  key={item}
+                  className={`package-card ${amount === item && !custom ? "active" : ""}`}
+                  onClick={() => selectAmount(item)}
+                >
+                  <span className="package-coin">R$</span>
+                  <strong>{item.toLocaleString("id-ID")}</strong>
+                  <small>ROBUX</small>
+                  <b>
+                    Rp{Math.ceil((item / 100) * RATE).toLocaleString("id-ID")}
+                  </b>
+                </button>
+              ))}
+            </div>
+
+            <div className="custom-box">
+              <label htmlFor="custom">CUSTOM ROBUX</label>
+              <div className="custom-input">
+                <input
+                  id="custom"
+                  type="number"
+                  min="1"
+                  placeholder="Masukkan jumlah Robux..."
+                  value={custom}
+                  onChange={(e) => setCustom(e.target.value)}
+                />
+                <button
+                  onClick={() => {
+                    const value = Number(custom);
+                    if (value > 0) setAmount(value);
+                    else alert("Masukkan jumlah Robux yang valid!");
+                  }}
+                >
+                  PILIH
+                </button>
+              </div>
+              <small>Harga Rp15.500 per 100 Robux.</small>
+            </div>
+          </div>
+
+          <div className="summary-panel">
+            <h3>★ DETAIL PESANAN</h3>
+
+            <label htmlFor="username">USERNAME ROBLOX</label>
             <input
+              id="username"
+              type="text"
+              placeholder="Masukkan username Roblox"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter your Roblox username"
             />
 
-            <label>DELIVERY METHOD</label>
-            <select value={method} onChange={(e) => setMethod(e.target.value)}>
+            <label htmlFor="method">METODE PEMBELIAN</label>
+            <select
+              id="method"
+              value={method}
+              onChange={(e) => setMethod(e.target.value)}
+            >
               <option>Game Pass</option>
               <option>Group Payout</option>
-              <option>Other / Ask Admin</option>
             </select>
 
-            <label className="agreement">
-              <input
-                type="checkbox"
-                checked={agree}
-                onChange={(e) => setAgree(e.target.checked)}
-              />
-              I confirm that my username and order details are correct.
-            </label>
+            <div className="summary-detail">
+              <div>
+                <span>Jumlah Robux</span>
+                <strong>{amount.toLocaleString("id-ID")} R$</strong>
+              </div>
+              <div>
+                <span>Harga per 100 R$</span>
+                <strong>Rp15.500</strong>
+              </div>
+            </div>
 
-            <button
-              className="main-button full"
-              disabled={!username.trim() || !agree}
-              onClick={order}
-            >
-              ORDER VIA WHATSAPP ↗
+            <div className="total-price">
+              <span>TOTAL PEMBAYARAN</span>
+              <strong>Rp{price.toLocaleString("id-ID")}</strong>
+            </div>
+
+            <button className="order-button" onClick={orderNow}>
+              PESAN SEKARANG <span>→</span>
             </button>
-          </div>
-
-          <div className="ticket">
-            <div className="ticket-header">REI ROBUX ★ ORDER TICKET</div>
-            <div className="ticket-character">👾</div>
-            <h3>PLAYER ORDER</h3>
-            <div className="ticket-row">
-              <span>Package</span>
-              <b>{selected} Robux</b>
-            </div>
-            <div className="ticket-row">
-              <span>Delivery</span>
-              <b>{method}</b>
-            </div>
-            <div className="ticket-total">
-              <small>ESTIMATED TOTAL</small>
-              <strong>{rupiah(getPrice(selected))}</strong>
-            </div>
-            <div className="ticket-footer">THANKS FOR PLAYING WITH REI!</div>
+            <p className="secure-note">
+              Pastikan username Roblox kamu sudah benar.
+            </p>
           </div>
         </div>
       </section>
 
-      <section className="how-section" id="how">
-        <span className="section-label">THREE EASY STEPS</span>
-        <h2>HOW TO <span>ORDER?</span></h2>
+      <section className="how-section">
+        <div className="section-heading">
+          <span className="section-label">EASY AS 1, 2, 3</span>
+          <h2>HOW TO <span>ORDER?</span></h2>
+        </div>
 
         <div className="steps">
-          <article>
-            <span>01</span>
-            <div>🛒</div>
-            <h3>PICK YOUR PACK</h3>
-            <p>Choose your favorite Robux package.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <div>💬</div>
-            <h3>CHAT WITH ADMIN</h3>
-            <p>Send your order through WhatsApp.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <div>🎮</div>
-            <h3>ENJOY YOUR GAME</h3>
-            <p>Follow the admin's instructions.</p>
-          </article>
+          <div className="step">
+            <b>01</b>
+            <span>🎮</span>
+            <h3>PILIH ROBUX</h3>
+            <p>Tentukan jumlah Robux yang ingin dibeli.</p>
+          </div>
+          <div className="step">
+            <b>02</b>
+            <span>📝</span>
+            <h3>ISI DATA</h3>
+            <p>Masukkan username dan metode pembelian.</p>
+          </div>
+          <div className="step">
+            <b>03</b>
+            <span>💬</span>
+            <h3>CHAT ADMIN</h3>
+            <p>Kirim pesanan melalui WhatsApp admin.</p>
+          </div>
         </div>
       </section>
 
-      <footer className="footer">
-        <div className="logo">
-          <span className="logo-icon">R</span>
-          <span>REI<span className="blue-text">ROBux</span>
-            <small>PLAYER SUPPLY STORE</small>
-          </span>
-        </div>
-        <p>PIXEL VIBES. BIG GAME ENERGY. ★</p>
-        <small>© {new Date().getFullYear()} REI ROBUX</small>
+      <footer>
+        <a href="#" className="brand">
+          <span className="brand-icon">R</span>
+          REI<span>ROBUX</span>
+        </a>
+        <p>© 2026 REI ROBUX. GAME ON, LEVEL UP!</p>
       </footer>
     </main>
   );
