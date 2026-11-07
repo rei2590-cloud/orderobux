@@ -1,998 +1,163 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap');
+/* ===== REI ROBUX RACING ANIMATIONS ===== */
 
-:root {
-  --blue: #1769d2;
-  --blue-light: #62baf0;
-  --yellow: #ffd52a;
-  --red: #e94b32;
-  --green: #a5dc48;
-  --orange: #ff873f;
-  --purple: #a99af0;
-  --ink: #202b3b;
-  --paper: #f7f5e9;
+@keyframes raceDrive {
+  0% {
+    transform: translateX(-35px) rotate(-5deg);
+  }
+  45% {
+    transform: translateX(15px) rotate(-2deg);
+  }
+  100% {
+    transform: translateX(-35px) rotate(-5deg);
+  }
 }
 
-* {
-  box-sizing: border-box;
-  scroll-behavior: smooth;
+@keyframes floating {
+  0%, 100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-13px) rotate(3deg);
+  }
 }
 
-body {
-  margin: 0;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: 'Nunito', sans-serif;
+@keyframes speedFlash {
+  0%, 100% {
+    opacity: .25;
+    transform: translateX(-15px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(15px);
+  }
 }
 
-button, input {
-  font: inherit;
+@keyframes stickerBounce {
+  0%, 100% {
+    transform: rotate(-10deg) scale(1);
+  }
+  50% {
+    transform: rotate(8deg) scale(1.08);
+  }
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+@keyframes tickerMove {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-45%);
+  }
 }
 
-.race-top {
-  min-height: 38px;
-  padding: 9px 20px;
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  flex-wrap: wrap;
-  background: var(--yellow);
-  border-bottom: 2px solid var(--ink);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 1.4px;
+@keyframes wheelSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.navbar {
-  max-width: 1180px;
-  margin: auto;
-  padding: 18px 25px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 29px;
-  font-weight: 900;
-  letter-spacing: -1px;
-}
-
-.brand-mark {
-  width: 43px;
-  height: 43px;
-  display: grid;
-  place-items: center;
-  background: var(--yellow);
-  border: 2px solid var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
-  transform: skew(-8deg);
-}
-
-.brand-blue {
-  color: var(--blue);
-}
-
-.nav-links {
-  display: flex;
-  gap: 28px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 15px;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-.nav-links a:hover {
-  color: var(--blue);
-}
-
-.nav-cta {
-  padding: 11px 18px;
-  background: var(--blue);
-  color: white;
-  border: 2px solid var(--ink);
-  box-shadow: 4px 4px 0 var(--ink);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-.hero {
-  max-width: 1180px;
-  min-height: 510px;
-  margin: 20px auto 55px;
-  padding: 55px 45px;
-  display: grid;
-  grid-template-columns: 1.05fr .95fr;
-  align-items: center;
-  gap: 30px;
-  background: var(--blue);
-  border: 3px solid var(--ink);
-  box-shadow: 9px 9px 0 var(--ink);
-  overflow: hidden;
-  position: relative;
-}
-
-.hero-copy {
-  position: relative;
-  z-index: 2;
-}
-
-.hero-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 13px;
-  background: var(--yellow);
-  border: 2px solid var(--ink);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900;
-  letter-spacing: 1px;
-  transform: skew(-5deg);
-}
-
-.hero h1 {
-  margin: 25px 0 15px;
-  display: flex;
-  flex-direction: column;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(65px, 8vw, 105px);
-  font-weight: 900;
-  line-height: .78;
-  letter-spacing: -3px;
-  color: white;
-  text-shadow: 4px 4px 0 var(--ink);
-}
-
-.hero h1 span {
-  color: var(--yellow);
-}
-
-.hero h1 strong {
-  color: white;
-}
-
-.hero-description {
-  max-width: 450px;
-  color: white;
-  font-size: 16px;
-  line-height: 1.8;
-  font-weight: 700;
-}
-
-.start-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 25px;
-  margin-top: 18px;
-  padding: 14px 20px;
-  background: var(--yellow);
-  border: 2px solid var(--ink);
-  box-shadow: 5px 5px 0 var(--ink);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 19px;
-  font-weight: 900;
-  transition: .2s;
-}
-
-.start-button:hover {
-  transform: translate(3px, 3px);
-  box-shadow: 2px 2px 0 var(--ink);
-}
-
-.hero-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 35px;
-}
-
-.hero-tags span {
-  padding: 7px 10px;
-  background: white;
-  border: 2px solid var(--ink);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.race-visual {
-  min-height: 360px;
-  position: relative;
-  display: grid;
-  place-items: center;
-  background: var(--yellow);
-  border: 3px solid var(--ink);
-  overflow: hidden;
-  box-shadow: 7px 7px 0 var(--ink);
-}
-
-.race-number {
-  position: absolute;
-  top: 0;
-  right: 15px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 100px;
-  font-weight: 900;
-  color: rgba(32, 43, 59, .12);
-}
-
-.speed-lines {
-  position: absolute;
-  left: -15px;
-  top: 45%;
-  font-size: 70px;
-  font-weight: 900;
-  color: var(--red);
-  transform: rotate(-15deg);
-}
-
-.car-scene {
-  width: 100%;
-  height: 220px;
-  position: relative;
-  display: grid;
-  place-items: center;
-  z-index: 2;
-}
-
-.car-cloud {
-  position: absolute;
-  top: -10px;
-  right: 30px;
-  font-size: 55px;
-  color: white;
-}
-
+/* Mobil balap */
 .race-car {
-  position: relative;
-  width: 245px;
-  height: 125px;
-  transform: rotate(-5deg);
-}
-
-.car-body {
-  position: absolute;
-  left: 10px;
-  bottom: 22px;
-  width: 225px;
-  height: 85px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-  background: var(--red);
-  border: 4px solid var(--ink);
-  border-radius: 55px 65px 20px 20px;
-  box-shadow: inset 0 -12px rgba(0, 0, 0, .1);
-  color: white;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900;
-  font-size: 25px;
-}
-
-.car-body b {
-  padding: 4px 10px;
-  background: var(--yellow);
-  border: 2px solid var(--ink);
-  color: var(--ink);
-  font-size: 25px;
-}
-
-.car-window {
-  position: absolute;
-  z-index: 2;
-  top: 2px;
-  left: 83px;
-  width: 90px;
-  height: 45px;
-  background: var(--blue-light);
-  border: 4px solid var(--ink);
-  border-radius: 35px 35px 5px 5px;
+  animation: raceDrive 2.5s ease-in-out infinite;
 }
 
 .wheel {
-  position: absolute;
-  z-index: 3;
-  bottom: 0;
-  width: 53px;
-  height: 53px;
-  background: var(--ink);
-  border: 5px solid white;
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px var(--ink);
+  animation: wheelSpin 1s linear infinite;
 }
 
-.wheel-left {
-  left: 35px;
-}
-
-.wheel-right {
-  right: 25px;
-}
-
-.car-shadow {
-  position: absolute;
-  bottom: 25px;
-  width: 240px;
-  height: 15px;
-  background: rgba(32, 43, 59, .2);
-  border-radius: 50%;
-}
-
-.visual-sticker {
-  position: absolute;
-  z-index: 4;
-  padding: 10px 15px;
-  border: 2px solid var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900;
-  font-size: 20px;
+/* Dekorasi */
+.race-number {
+  animation: floating 3s ease-in-out infinite;
 }
 
 .sticker-fast {
-  top: 40px;
-  left: 20px;
-  background: var(--green);
-  transform: rotate(-10deg);
+  animation: stickerBounce 2s ease-in-out infinite;
 }
 
 .sticker-go {
-  bottom: 35px;
-  right: 20px;
-  background: white;
-  transform: rotate(8deg);
+  animation: floating 2.4s ease-in-out infinite;
 }
 
-.visual-checker {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 18px;
-  background: repeating-conic-gradient(#202b3b 0% 25%, white 0% 50%) 0 / 24px 24px;
+.speed-lines {
+  animation: speedFlash 1.2s ease-in-out infinite;
 }
 
-.visual-caption {
-  position: absolute;
-  bottom: 25px;
-  left: 20px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.race-ticker {
-  overflow: hidden;
-  padding: 14px 0;
-  background: var(--red);
-  color: white;
-  border-block: 3px solid var(--ink);
-  white-space: nowrap;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 18px;
-  font-weight: 900;
-  letter-spacing: 2px;
-}
-
+/* Tulisan berjalan */
 .race-ticker div {
-  animation: raceScroll 25s linear infinite;
+  animation: tickerMove 18s linear infinite;
 }
 
-@keyframes raceScroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-45%); }
-}
-
-.packages-section,
-.order-section,
-.rules-section {
-  max-width: 1100px;
-  margin: 95px auto;
-  padding: 0 25px;
-  text-align: center;
-}
-
-.section-kicker {
-  display: inline-block;
-  padding: 7px 13px;
-  background: var(--yellow);
-  border: 2px solid var(--ink);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-.packages-section h2,
-.order-section h2,
-.rules-section h2 {
-  margin: 17px 0 5px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(45px, 6vw, 65px);
-  font-weight: 900;
-  line-height: 1;
-}
-
-.packages-section h2 span,
-.order-section h2 span,
-.rules-section h2 span {
-  color: var(--blue);
-}
-
-.section-subtitle {
-  margin: 10px 0 35px;
-  color: #69798a;
-  font-weight: 700;
-}
-
-.package-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
+/* Kartu paket */
 .package-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 19px 15px;
-  border: 3px solid var(--ink);
-  color: var(--ink);
-  cursor: pointer;
-  box-shadow: 5px 5px 0 var(--ink);
-  transition: .2s;
+  transition: transform .22s ease, box-shadow .22s ease;
 }
 
 .package-card:hover {
-  transform: translateY(-5px);
-}
-
-.package-card.active {
-  outline: 4px solid var(--blue);
-  outline-offset: 3px;
-  transform: translateY(-4px);
-}
-
-.package-card.blue { background: #b9e2ff; }
-.package-card.yellow { background: #ffeb91; }
-.package-card.green { background: #c8ed93; }
-.package-card.orange { background: #ffc18e; }
-.package-card.red { background: #ffaaa0; }
-.package-card.purple { background: #d2c6ff; }
-
-.package-top {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 10px;
-  border-bottom: 2px dashed var(--ink);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 1px;
+  transform: translateY(-8px) rotate(-1deg);
+  box-shadow: 8px 10px 0 var(--ink);
 }
 
 .package-icon {
-  width: 62px;
-  height: 62px;
-  display: grid;
-  place-items: center;
-  margin-top: 18px;
-  background: var(--blue);
-  border: 3px solid var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
-  color: white;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 43px;
-  font-weight: 900;
-  transform: skew(-6deg);
+  transition: transform .25s ease;
 }
 
-.package-amount {
-  margin-top: 12px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 55px;
-  font-weight: 900;
-  line-height: .95;
+.package-card:hover .package-icon {
+  transform: skew(-6deg) rotate(-10deg) scale(1.1);
 }
 
-.package-unit {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900;
-  letter-spacing: 4px;
+/* Tombol */
+.order-button,
+.start-button,
+.nav-cta {
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.package-price {
-  margin-top: 13px;
-  font-size: 20px;
-  font-weight: 900;
-}
-
-.package-label {
-  margin-top: 4px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-.package-select {
-  width: 100%;
-  margin-top: 17px;
-  padding: 9px;
-  background: white;
-  border: 2px solid var(--ink);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-.best-tag {
-  position: absolute;
-  top: -13px;
-  right: 10px;
-  padding: 5px 10px;
-  background: var(--red);
-  border: 2px solid var(--ink);
-  color: white;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.custom-card {
-  max-width: 730px;
-  margin: 45px auto 0;
-  padding: 25px;
-  display: flex;
-  gap: 22px;
-  background: #e5f3ff;
-  border: 3px solid var(--ink);
-  box-shadow: 6px 6px 0 var(--ink);
-  text-align: left;
-}
-
-.custom-number {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 65px;
-  font-weight: 900;
-  color: var(--blue);
-}
-
-.custom-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.custom-kicker {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  color: var(--blue);
-}
-
-.custom-content h3 {
-  margin: 2px 0;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 30px;
-  font-weight: 900;
-}
-
-.custom-content p {
-  margin: 5px 0 15px;
-  color: #69798a;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.custom-content input,
-.order-card input {
-  width: 100%;
-  padding: 14px;
-  background: white;
-  border: 2px solid var(--ink);
-  border-radius: 0;
-  outline: none;
-  color: var(--ink);
-}
-
-.custom-content input:focus,
-.order-card input:focus {
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(23, 105, 210, .15);
-}
-
-.custom-price {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 15px;
-  padding: 14px;
-  background: var(--yellow);
-  border: 2px solid var(--ink);
-}
-
-.custom-price span {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.custom-price strong {
-  font-size: 18px;
-  font-weight: 900;
-}
-
-.custom-confirm {
-  margin-top: 12px;
-  color: #287d29;
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.order-section {
-  max-width: 850px;
-}
-
-.order-card {
-  max-width: 610px;
-  margin: 35px auto 0;
-  padding: 30px;
-  background: white;
-  border: 3px solid var(--ink);
-  box-shadow: 7px 7px 0 var(--ink);
-  text-align: left;
-}
-
-.order-card-heading {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-  border-bottom: 2px dashed #b9c8d7;
-}
-
-.order-icon {
-  width: 55px;
-  height: 55px;
-  display: grid;
-  place-items: center;
-  background: var(--yellow);
-  border: 2px solid var(--ink);
-  font-size: 28px;
-}
-
-.order-card-heading h3 {
-  margin: 0;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 25px;
-  font-weight: 900;
-}
-
-.order-card-heading p {
-  margin: 0;
-  color: #69798a;
-  font-size: 13px;
-}
-
-.order-card label {
-  display: block;
-  margin: 17px 0 7px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-.order-summary {
-  margin-top: 25px;
-  padding: 17px;
-  background: #eef6ff;
-  border: 2px dashed var(--blue);
-}
-
-.order-summary > div {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 8px 0;
-  font-size: 14px;
-}
-
-.order-summary strong {
-  text-align: right;
-}
-
-.total-row {
-  margin-top: 8px;
-  padding-top: 15px !important;
-  border-top: 2px dashed #a9c5df;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 17px !important;
-  font-weight: 900;
-}
-
-.total-row strong {
-  color: var(--blue);
-  font-size: 23px;
-}
-
-.payment-info {
-  display: flex;
-  gap: 14px;
-  margin-top: 18px;
-  padding: 15px;
-  background: #fff1b8;
-  border: 2px solid var(--ink);
-}
-
-.payment-icon {
-  font-size: 33px;
-  font-weight: 900;
-}
-
-.payment-info strong {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 18px;
-  font-weight: 900;
-}
-
-.payment-info p {
-  margin: 3px 0 0;
-  color: #69798a;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.order-button {
-  width: 100%;
-  margin-top: 22px;
-  padding: 16px;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  background: var(--blue);
-  border: 3px solid var(--ink);
-  box-shadow: 5px 5px 0 var(--ink);
-  color: white;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 21px;
-  font-weight: 900;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.order-button:hover {
+.order-button:hover,
+.start-button:hover,
+.nav-cta:hover {
   transform: translate(3px, 3px);
-  box-shadow: 2px 2px 0 var(--ink);
 }
 
-.order-footnote {
-  margin: 18px 0 0;
-  text-align: center;
-  color: #788696;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 1px;
+/* Animasi masuk yang lembut */
+.hero-copy {
+  animation: enterLeft .8s ease both;
 }
 
-.rules-section {
-  max-width: 1000px;
+.race-visual {
+  animation: enterRight .8s ease both;
 }
 
-.rules-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-top: 30px;
-  text-align: left;
-}
-
-.rule-card {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 19px;
-  background: #dceeff;
-  border: 2px solid var(--ink);
-  box-shadow: 4px 4px 0 var(--ink);
-}
-
-.rule-card:nth-child(2) {
-  background: #fff0a8;
-}
-
-.rule-card:nth-child(3) {
-  background: #d7f2ad;
-}
-
-.rule-card:nth-child(4) {
-  background: #ffd0b0;
-}
-
-.rule-card b {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 26px;
-  font-weight: 900;
-}
-
-.rule-card span {
-  font-size: 24px;
-}
-
-.rule-card p {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1.6;
-}
-
-.footer {
-  position: relative;
-  overflow: hidden;
-  padding: 45px 20px 35px;
-  background: var(--blue);
-  border-top: 3px solid var(--ink);
-  color: white;
-  text-align: center;
-}
-
-.footer-checker {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 15px;
-  background: repeating-conic-gradient(#202b3b 0% 25%, white 0% 50%) 0 / 24px 24px;
-}
-
-.footer-brand {
-  margin-top: 10px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 38px;
-  font-weight: 900;
-}
-
-.footer-brand span {
-  color: var(--yellow);
-}
-
-.footer p {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900;
-  letter-spacing: 2px;
-}
-
-.footer small {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-
-@media (max-width: 720px) {
-  .race-top {
-    justify-content: center;
-    font-size: 11px;
+@keyframes enterLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-35px);
   }
-
-  .navbar {
-    padding: 15px;
-    flex-wrap: wrap;
-  }
-
-  .brand {
-    font-size: 25px;
-  }
-
-  .nav-links {
-    order: 3;
-    width: 100%;
-    justify-content: center;
-    gap: 24px;
-    font-size: 13px;
-  }
-
-  .nav-cta {
-    padding: 9px 12px;
-    font-size: 12px;
-  }
-
-  .hero {
-    margin: 12px 13px 40px;
-    padding: 35px 22px;
-    grid-template-columns: 1fr;
-  }
-
-  .hero h1 {
-    font-size: 78px;
-  }
-
-  .hero-description {
-    font-size: 14px;
-  }
-
-  .race-visual {
-    min-height: 330px;
-  }
-
-  .packages-section,
-  .order-section,
-  .rules-section {
-    margin: 70px auto;
-    padding: 0 17px;
-  }
-
-  .package-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-  }
-
-  .package-card {
-    padding: 15px 9px;
-  }
-
-  .package-amount {
-    font-size: 45px;
-  }
-
-  .package-price {
-    font-size: 16px;
-  }
-
-  .custom-card {
-    padding: 17px;
-    gap: 12px;
-  }
-
-  .custom-number {
-    font-size: 45px;
-  }
-
-  .custom-content h3 {
-    font-size: 25px;
-  }
-
-  .order-card {
-    padding: 20px 16px;
-  }
-
-  .rules-grid {
-    grid-template-columns: 1fr;
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
-@media (max-width: 390px) {
-  .package-grid {
-    grid-template-columns: 1fr;
+@keyframes enterRight {
+  from {
+    opacity: 0;
+    transform: translateX(35px);
   }
-
-  .hero h1 {
-    font-size: 65px;
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
+}
 
-  .custom-card {
-    display: block;
-  }
-
-  .custom-number {
-    line-height: 1;
+/* Hormati pengaturan pengurangan gerakan */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
   }
 }
