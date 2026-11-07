@@ -8,12 +8,12 @@ const formatRobux = (value) =>
 async function readJson(response) {
   const raw = await response.text();
   if (!raw) {
-    throw new Error(`Server memberi respons kosong (HTTP ${response.status}). Cek deployment Vercel.`);
+    throw new Error(`Server memberi respons kosong (HTTP ${response.status}). Cek deployment Netlify.`);
   }
   try {
     return JSON.parse(raw);
   } catch {
-    throw new Error(`Server tidak mengirim JSON (HTTP ${response.status}). Cek Runtime Logs Vercel.`);
+    throw new Error(`Server tidak mengirim JSON (HTTP ${response.status}). Cek Netlify Function logs.`);
   }
 }
 
@@ -34,7 +34,7 @@ export default function AdminPage() {
 
     if (ordersRes.status === 401 || stockRes.status === 401) {
       setLoggedIn(false);
-      return;
+      throw new Error("Sesi admin tidak valid. Silakan login kembali.");
     }
 
     const ordersData = await readJson(ordersRes);
