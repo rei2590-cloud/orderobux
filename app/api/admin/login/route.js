@@ -11,7 +11,7 @@ export async function POST(request) {
 
     if (!expected.length) {
       return NextResponse.json(
-        { error: "ADMIN_PASSWORD belum diatur di Vercel Production." },
+        { error: "ADMIN_PASSWORD belum diatur di Netlify Environment variables. Tambahkan variabel lalu deploy ulang." },
         { status: 500 }
       );
     }
@@ -28,7 +28,7 @@ export async function POST(request) {
 
     if (!process.env.ADMIN_SESSION_SECRET) {
       return NextResponse.json(
-        { error: "ADMIN_SESSION_SECRET belum diatur di Vercel Production." },
+        { error: "ADMIN_SESSION_SECRET belum diatur di Netlify Environment variables. Tambahkan variabel lalu deploy ulang." },
         { status: 500 }
       );
     }
