@@ -2,9 +2,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "REI ROBUX — Happy Gaming Playground",
-  description:
-    "Welcome to REI ROBUX. Your happy Roblox gaming playground!",
+  title: "REI ROBUX | Happy Gaming Playground",
+  description: "REI ROBUX - Your Happy Roblox Gaming Store!",
 };
 
 export default function RootLayout({ children }) {
