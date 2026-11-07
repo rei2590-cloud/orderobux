@@ -1,4 +1,4 @@
-
+import RrExtras from "./RrExtras";
 import "./globals.css";
 
 export const metadata = {
@@ -9,7 +9,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="id">
-      <body>{children}</body>
+      <body>
+        {children}
+        <RrExtras />
+      </body>
     </html>
   );
 }
