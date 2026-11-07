@@ -1,14 +1,10 @@
-
 import { NextResponse } from "next/server";
-import { isAdmin } from "@/lib/adminAuth";
+import isAdmin from "@/lib/adminAuth";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export async function POST(request, { params }) {
   if (!(await isAdmin())) {
-    return NextResponse.json(
-      { error: "Tidak diizinkan" },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: "Tidak diizinkan" }, { status: 401 });
   }
 
   const { id } = await params;
@@ -25,8 +21,5 @@ export async function POST(request, { params }) {
     );
   }
 
-  return NextResponse.json({
-    success: true,
-    remaining_stock: data,
-  });
+  return NextResponse.json({ success: true, remaining_stock: data });
 }
