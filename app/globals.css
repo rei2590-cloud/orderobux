@@ -1,45 +1,63 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap');
 
-/* REI ROBUX — BOYISH KIDCORE / ROBLOX / Y2K */
+/* =========================================================
+   REI ROBUX — ROBLOX BOYISH KIDCORE
+   Palette: sky blue, royal blue, arcade yellow, soft green
+   ========================================================= */
 
 :root {
   --blue: #79d5ff;
+  --blue-light: #dff5ff;
   --royal: #2878ee;
   --yellow: #ffe34f;
   --green: #b9e995;
-  --lavender: #b8b5ff;
-  --orange: #ffc477;
   --ink: #202b3d;
   --paper: #f5fbff;
   --white: #ffffff;
+  --muted: #64748b;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 24px;
 }
 
 body {
   margin: 0;
   color: var(--ink);
-  background: var(--paper);
+  background-color: var(--paper);
   background-image: radial-gradient(#c8e7ff 1.4px, transparent 1.4px);
   background-size: 22px 22px;
   font-family: "Nunito", Arial, sans-serif;
   overflow-x: hidden;
 }
 
-button, input, select {
-  font: inherit;
+body,
+button,
+input,
+select {
+  font-family: "Nunito", Arial, sans-serif;
 }
 
-button, a {
+button,
+input,
+select {
+  font-size: inherit;
+}
+
+button,
+a {
   -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
 }
 
 a {
@@ -47,17 +65,20 @@ a {
   text-decoration: none;
 }
 
-button {
-  cursor: pointer;
+main {
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
 }
 
 /* TOP ANNOUNCEMENT */
 .top-strip {
   width: 100%;
   padding: 11px 16px;
-  text-align: center;
+  color: var(--ink);
   background: var(--yellow);
   border-bottom: 3px solid var(--ink);
+  text-align: center;
   font-family: "Fredoka", sans-serif;
   font-size: 14px;
   font-weight: 700;
@@ -73,24 +94,3 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-}
-
-.logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 11px;
-  font-family: "Fredoka", sans-serif;
-  font-size: 27px;
-  font-weight: 700;
-  letter-spacing: -.7px;
-}
-
-.logo-icon {
-  display: grid;
-  place-items: center;
-  width: 45px;
-  height: 45px;
-  background: var(--yellow);
-  border: 3px solid var(--ink);
-  border-radius: 12px;
-  box-shadow: 3px 3px 0 var(--ink);
