@@ -31,7 +31,7 @@ export async function POST(request) {
 
     if (stockError) {
       return NextResponse.json(
-        { error: "Stok belum dapat diperiksa" },
+        { error: "Stok belum dapat diperiksa. Database Supabase belum siap atau konfigurasi koneksi perlu diperiksa." },
         { status: 500 }
       );
     }
@@ -55,7 +55,7 @@ export async function POST(request) {
 
     if (error) {
       return NextResponse.json(
-        { error: "Gagal membuat pesanan" },
+        { error: "Pesanan gagal disimpan ke database. Periksa tabel robux_orders di Supabase." },
         { status: 500 }
       );
     }
