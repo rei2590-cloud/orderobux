@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -52,7 +53,7 @@ export default function Home() {
     };
   }, []);
 
-  // Mengambil dan memperbarui status toko setiap 15 detik.
+  // Memeriksa status toko setiap 15 detik.
   useEffect(() => {
     let active = true;
 
@@ -69,7 +70,8 @@ export default function Home() {
         const data = await response.json();
 
         if (active) setStore(data);
-      } catch {
+      } catch (error) {
+        console.error("Gagal memeriksa status toko:", error);
         if (active) setStore(null);
       }
     }
@@ -129,7 +131,6 @@ export default function Home() {
       return;
     }
 
-    // Membuka tab sebelum menunggu respons API WhatsApp.
     const whatsappWindow = window.open("about:blank", "_blank");
 
     if (!whatsappWindow) {
@@ -187,57 +188,52 @@ export default function Home() {
 
   return (
     <main>
-      {/* NOTIFIKASI STATUS TOKO */}
-      {store && (
-        <div
-          role="status"
-          aria-live="polite"
-          style={{
-            background: store.is_open ? "#15803d" : "#b91c1c",
-            color: "#ffffff",
-            padding: "14px 16px",
-            textAlign: "center",
-            fontWeight: 800,
-            position: "relative",
-            zIndex: 10,
-          }}
-        >
-          <div style={{ fontSize: "16px" }}>
-            {store.is_open
-              ? "🟢 TOKO SEDANG BUKA"
-              : "🔴 TOKO SEDANG TUTUP"}
-          </div>
+      {/* NOTIFIKASI TOKO PALING ATAS */}
+      <div
+        role="status"
+        aria-live="polite"
+        style={{
+          position: "relative",
+          width: "100%",
+          zIndex: 99999,
+          background:
+            store === null
+              ? "#374151"
+              : store.is_open
+                ? "#15803d"
+                : "#b91c1c",
+          color: "#ffffff",
+          padding: "16px 20px",
+          textAlign: "center",
+          fontWeight: 900,
+          borderBottom: "3px solid #202b3b",
+        }}
+      >
+        {store === null ? (
+          <div>MEMERIKSA STATUS TOKO...</div>
+        ) : (
+          <>
+            <div style={{ fontSize: "18px" }}>
+              {store.is_open
+                ? "🟢 TOKO SEDANG BUKA"
+                : "🔴 TOKO SEDANG TUTUP"}
+            </div>
 
-          <div
-            style={{
-              fontSize: "13px",
-              marginTop: "4px",
-              fontWeight: 500,
-            }}
-          >
-            {store.is_open
-              ? "Silakan lakukan pemesanan sekarang!"
-              : store.closed_message ||
-                "Maaf, toko sedang tutup. Silakan kembali lagi nanti."}
-          </div>
-        </div>
-      )}
-
-      {!store && (
-        <div
-          role="status"
-          aria-live="polite"
-          style={{
-            background: "#374151",
-            color: "#ffffff",
-            padding: "12px 16px",
-            textAlign: "center",
-            fontWeight: 700,
-          }}
-        >
-          MEMERIKSA STATUS TOKO...
-        </div>
-      )}
+            <div
+              style={{
+                fontSize: "13px",
+                marginTop: "5px",
+                fontWeight: 700,
+              }}
+            >
+              {store.is_open
+                ? "Silakan lakukan pemesanan sekarang!"
+                : store.closed_message ||
+                  "Maaf, toko sedang tutup. Silakan kembali lagi nanti."}
+            </div>
+          </>
+        )}
+      </div>
 
       <div className="race-top">
         <span>🏁 REI ROBUX RACING CLUB</span>
