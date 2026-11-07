@@ -7,15 +7,15 @@ const WHATSAPP = "6287838482178";
 const RATE = 15500;
 
 const packages = [
-  { amount: 50, color: "blue", popular: false },
-  { amount: 100, color: "yellow", popular: true },
-  { amount: 200, color: "pink", popular: false },
-  { amount: 300, color: "green", popular: false },
-  { amount: 500, color: "purple", popular: false },
-  { amount: 1000, color: "orange", popular: false },
+  { amount: 50, color: "blue" },
+  { amount: 100, color: "lime", popular: true },
+  { amount: 200, color: "yellow" },
+  { amount: 300, color: "orange" },
+  { amount: 500, color: "purple" },
+  { amount: 1000, color: "green" },
 ];
 
-function formatPrice(value) {
+function money(value) {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -31,23 +31,24 @@ export default function Home() {
 
   const price = Math.ceil((amount / 100) * RATE);
 
-  function choosePackage(value) {
+  function selectPackage(value) {
     setAmount(value);
     setCustomAmount("");
   }
 
-  function handleCustomAmount(value) {
+  function changeCustom(value) {
     setCustomAmount(value);
-    const number = Number(value);
+    if (value === "") return;
 
-    if (number > 0 && Number.isInteger(number)) {
+    const number = Number(value);
+    if (Number.isInteger(number) && number > 0) {
       setAmount(number);
     }
   }
 
   function orderNow() {
     if (!username.trim() || !displayName.trim()) {
-      alert("Isi Username dan Display Name terlebih dahulu!");
+      alert("Username dan Display Name wajib diisi!");
       return;
     }
 
@@ -57,17 +58,17 @@ export default function Home() {
     }
 
     const message = [
-      "HALO REI ROBUX! 🎮",
+      "YO REI ROBUX! 🎮",
       "",
-      "Saya ingin melakukan pemesanan Robux.",
+      "I WANT TO ORDER ROBUX!",
       "",
       `Username: ${username.trim()}`,
       `Display Name: ${displayName.trim()}`,
-      `Jumlah Robux: ${amount} R$`,
-      "Metode: Robux Visend",
-      `Total: ${formatPrice(price)}`,
+      `Robux: ${amount} R$`,
+      "Payment: QRIS",
+      `Total: ${money(price)}`,
       "",
-      "Mohon bantu proses pesanan saya. Terima kasih!",
+      "Please assist me with my order. Thank you!",
     ].join("\n");
 
     window.open(
@@ -78,247 +79,287 @@ export default function Home() {
 
   return (
     <main>
-      <div className="announcement">
-        ⭐ WELCOME TO REI ROBUX PLAYGROUND! ⭐
+      <div className="top-strip">
+        <span>★ REI ROBUX ARCADE ★</span>
+        <span>INSERT COINS & START PLAYING!</span>
+        <span>★ EST. 2026 ★</span>
       </div>
 
       <nav className="navbar">
-        <a href="#" className="logo">
-          <span className="logo-icon">R$</span>
-          <span>REI <b>ROBUX</b></span>
+        <a href="#" className="brand">
+          <span className="brand-icon">R$</span>
+          <span>REI<span className="brand-highlight">ROBUX</span></span>
         </a>
 
         <div className="nav-links">
-          <a href="#home">Home</a>
-          <a href="#packages">Packages</a>
-          <a href="#terms">Terms & Conditions</a>
+          <a href="#home">HOME</a>
+          <a href="#packages">PACKAGES</a>
+          <a href="#order">ORDER</a>
+          <a href="#terms">T&C</a>
         </div>
 
-        <a href="#order" className="nav-button">ORDER NOW ✦</a>
+        <a href="#packages" className="nav-order">PLAY NOW ↗</a>
       </nav>
 
       <section className="hero" id="home">
+        <div className="hero-grid"></div>
+
         <div className="hero-content">
-          <div className="hero-label">🎮 YOUR HAPPY ROBUX STORE</div>
+          <div className="hero-tag">
+            <span className="live-dot"></span>
+            WELCOME TO THE PLAYGROUND
+          </div>
 
           <h1>
-            LEVEL UP
+            GAME
             <br />
-            YOUR <span>GAME!</span>
+            <span>ON.</span>
+            <br />
+            <span className="outline-text">ROBUX UP!</span>
           </h1>
 
           <p>
-            Need more Robux? You're in the right place!
-            Let's make your Roblox adventure more exciting!
+            Your Roblox adventure starts here.
+            Pick your Robux, make your order,
+            and get ready to level up!
           </p>
 
-          <div className="hero-buttons">
-            <a href="#packages" className="primary-button">
-              GET YOUR ROBUX →
+          <div className="hero-actions">
+            <a href="#packages" className="main-button">
+              GET ROBUX <span>↗</span>
             </a>
-            <a href="#terms" className="secondary-button">
-              READ T&C
+            <a href="#terms" className="text-button">
+              READ THE RULES +
             </a>
           </div>
 
-          <div className="hero-features">
-            <span>✨ ROBUX CLEAN</span>
-            <span>💳 REKBER AVAILABLE</span>
-            <span>💛 FRIENDLY SERVICE</span>
+          <div className="hero-stats">
+            <div><strong>R$</strong><span>ROBUX STORE</span></div>
+            <div><strong>QRIS</strong><span>EASY PAYMENT</span></div>
+            <div><strong>2026</strong><span>GAME SEASON</span></div>
           </div>
         </div>
 
-        <div className="hero-art">
-          <div className="floating-star star-one">★</div>
-          <div className="floating-star star-two">✦</div>
-          <div className="floating-star star-three">✧</div>
+        <div className="hero-visual">
+          <div className="visual-sticker sticker-star">★</div>
+          <div className="visual-sticker sticker-boom">BOOM!</div>
+          <div className="visual-sticker sticker-play">LET'S PLAY!</div>
 
-          <div className="robux-card">
-            <div className="robux-symbol">R$</div>
-            <div className="robux-sparkle">✦</div>
-            <div className="robux-caption">LET'S PLAY!</div>
+          <div className="game-console">
+            <div className="console-top">
+              <span>REI ARCADE</span>
+              <span>● ONLINE</span>
+            </div>
+            <div className="console-screen">
+              <div className="screen-symbol">R$</div>
+              <div className="screen-text">LEVEL UP!</div>
+              <div className="screen-stars">✦ ★ ✦</div>
+            </div>
+            <div className="console-controls">
+              <div className="dpad">
+                <span>✚</span>
+              </div>
+              <div className="console-buttons">
+                <span>A</span>
+                <span>B</span>
+              </div>
+            </div>
           </div>
+          <div className="visual-caption">YOUR NEXT LEVEL STARTS HERE_</div>
+        </div>
 
-          <div className="bubble bubble-one">WOW!</div>
-          <div className="bubble bubble-two">+ ROBUX</div>
+        <div className="hero-bottom-label">
+          <span>PRESS START TO CONTINUE</span>
+          <span>▼ SCROLL DOWN ▼</span>
         </div>
       </section>
 
-      <div className="ticker">
+      <div className="marquee">
         <div>
-          ✦ REI ROBUX ✦ ROBUX CLEAN ✦ HAPPY GAMING ✦
-          AVAILABLE REKBER & QRIS ✦ REI ROBUX ✦
-          ROBUX CLEAN ✦ HAPPY GAMING ✦
+          ★ REI ROBUX ★ ROBUX CLEAN ★ LEVEL UP ★
+          AVAILABLE REKBER ★ QRIS PAYMENT ★
+          REI ROBUX ★ ROBUX CLEAN ★ LEVEL UP ★
         </div>
       </div>
 
       <section className="packages-section" id="packages">
+        <div className="section-topline">
+          <span>01 / SELECT YOUR ITEM</span>
+          <span>PLAYER MARKETPLACE</span>
+        </div>
+
         <div className="section-heading">
-          <span className="section-label">PICK YOUR FAVORITE!</span>
-          <h2>ROBUX <span>PACKAGES</span></h2>
-          <p>Choose your Robux package and let's go!</p>
+          <span className="mini-tag">CHOOSE YOUR POWER-UP</span>
+          <h2>ROBUX <span>SHOP.</span></h2>
+          <p>Pick your package. Get ready to play.</p>
         </div>
 
         <div className="package-grid">
           {packages.map((item) => (
             <button
-              type="button"
               key={item.amount}
+              type="button"
+              onClick={() => selectPackage(item.amount)}
               className={`package-card ${item.color} ${
                 amount === item.amount && !customAmount ? "selected" : ""
               }`}
-              onClick={() => choosePackage(item.amount)}
             >
-              {item.popular && <span className="popular-tag">POPULAR!</span>}
+              {item.popular && <span className="popular-label">HOT PICK ★</span>}
               <span className="package-icon">R$</span>
               <strong>{item.amount.toLocaleString("id-ID")}</strong>
-              <span className="robux-text">ROBUX</span>
+              <span className="package-unit">ROBUX</span>
               <span className="package-price">
-                {formatPrice(Math.ceil((item.amount / 100) * RATE))}
+                {money(Math.ceil((item.amount / 100) * RATE))}
               </span>
-              <span className="choose-text">
+              <span className="package-select">
                 {amount === item.amount && !customAmount
                   ? "✓ SELECTED"
-                  : "SELECT PACKAGE"}
+                  : "SELECT ITEM →"}
               </span>
             </button>
           ))}
         </div>
 
-        <div className="custom-box">
+        <div className="custom-amount">
           <div>
-            <h3>WANT A DIFFERENT AMOUNT?</h3>
-            <p>Enter your own Robux amount here!</p>
+            <span className="custom-label">CUSTOM ITEM</span>
+            <h3>BUILD YOUR OWN PACKAGE!</h3>
+            <p>Enter the Robux amount you want.</p>
           </div>
           <input
             type="number"
             min="1"
             step="1"
-            placeholder="Example: 750"
+            placeholder="ENTER AMOUNT..."
             value={customAmount}
-            onChange={(e) => handleCustomAmount(e.target.value)}
+            onChange={(e) => changeCustom(e.target.value)}
           />
         </div>
       </section>
 
       <section className="order-section" id="order">
-        <div className="order-container">
-          <div className="order-info">
-            <span className="section-label">READY TO ORDER?</span>
-            <h2>LET'S MAKE YOUR <span>ORDER!</span></h2>
+        <div className="section-topline">
+          <span>02 / PLAYER CHECKOUT</span>
+          <span>READY PLAYER ONE?</span>
+        </div>
+
+        <div className="order-layout">
+          <div className="order-copy">
+            <span className="mini-tag">ONE MORE STEP!</span>
+            <h2>LET'S MAKE<br /><span>IT OFFICIAL.</span></h2>
             <p>
-              Fill in your Roblox account details correctly.
-              Then continue your order through WhatsApp!
+              Enter your Roblox details, check your order,
+              and continue to WhatsApp.
             </p>
 
-            <div className="order-note">
-              <span>💡</span>
-              <p>
-                Only Username and Display Name are needed.
-                Never share your password or verification codes.
-              </p>
+            <div className="checkout-sticker">
+              <span>⚡</span>
+              <div>
+                <strong>NO PASSWORD NEEDED!</strong>
+                <p>Username and Display Name only.</p>
+              </div>
             </div>
           </div>
 
-          <div className="order-form">
-            <div className="form-title">
-              <span>🛒</span>
-              <h3>YOUR ORDER</h3>
+          <div className="checkout-card">
+            <div className="checkout-header">
+              <span>▣ PLAYER CHECKOUT</span>
+              <span>01 — 04</span>
             </div>
 
             <label htmlFor="username">ROBLOX USERNAME</label>
             <input
               id="username"
-              type="text"
-              placeholder="Enter your username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              placeholder="Your username..."
             />
 
-            <label htmlFor="displayName">ROBLOX DISPLAY NAME</label>
+            <label htmlFor="displayName">DISPLAY NAME</label>
             <input
               id="displayName"
-              type="text"
-              placeholder="Enter your display name"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
+              placeholder="Your display name..."
             />
 
             <label>PAYMENT METHOD</label>
-            <div className="payment-method">
-              <span>💎</span>
-              <strong>ROBUX VISEND</strong>
+            <div className="payment-option">
+              <div className="qris-icon">QR</div>
+              <div>
+                <strong>QRIS PAYMENT</strong>
+                <small>SCAN & PAY</small>
+              </div>
               <span className="payment-check">✓</span>
             </div>
 
-            <div className="receipt">
+            <div className="order-summary">
               <div>
-                <span>Robux Amount</span>
+                <span>SELECTED ROBUX</span>
                 <strong>{amount.toLocaleString("id-ID")} R$</strong>
               </div>
               <div>
-                <span>Price</span>
-                <strong>{formatPrice(price)}</strong>
+                <span>PAYMENT</span>
+                <strong>QRIS</strong>
               </div>
-              <div className="receipt-total">
-                <span>TOTAL PAYMENT</span>
-                <strong>{formatPrice(price)}</strong>
+              <div className="total-line">
+                <span>TOTAL PRICE</span>
+                <strong>{money(price)}</strong>
               </div>
             </div>
 
-            <button
-              type="button"
-              className="order-button"
-              onClick={orderNow}
-            >
-              ORDER VIA WHATSAPP →
+            <button type="button" onClick={orderNow} className="checkout-button">
+              CONTINUE VIA WHATSAPP ↗
             </button>
 
-            <p className="form-disclaimer">
-              Please double-check your account details before ordering.
+            <p className="checkout-note">
+              Payment instructions and QRIS details will be confirmed by admin.
             </p>
           </div>
         </div>
       </section>
 
       <section className="terms-section" id="terms">
+        <div className="section-topline">
+          <span>03 / PLAYER RULEBOOK</span>
+          <span>READ BEFORE PLAYING</span>
+        </div>
+
         <div className="section-heading">
-          <span className="section-label">IMPORTANT INFORMATION!</span>
-          <h2>TERMS & <span>CONDITIONS</span></h2>
-          <p>Please read before placing your order!</p>
+          <span className="mini-tag">IMPORTANT!</span>
+          <h2>RULES OF <span>THE GAME.</span></h2>
+          <p>Read these terms before making your order.</p>
         </div>
 
         <div className="terms-card">
-          <div className="terms-top">
-            <strong>📋 PLAYER RULEBOOK</strong>
-            <strong>REI ROBUX ★</strong>
+          <div className="terms-header">
+            <strong>REI ROBUX // TERMS & CONDITIONS</strong>
+            <span>V.2026</span>
           </div>
 
-          <div className="term-item">
-            <span className="term-number">I</span>
+          <div className="term-row">
+            <span className="term-index">I</span>
             <div>
-              <h3>ONLY TWO DETAILS!</h3>
-              <p>
-                Hanya membutuhkan Username dan Display Name Roblox.
-              </p>
+              <h3>ACCOUNT INFORMATION</h3>
+              <p>Hanya membutuhkan Username dan Display Name Roblox.</p>
             </div>
           </div>
 
-          <div className="term-item">
-            <span className="term-number">II</span>
+          <div className="term-row">
+            <span className="term-index">II</span>
             <div>
               <h3>ACCOUNT REQUIREMENT</h3>
               <p>
                 Akun wajib memenuhi persyaratan verifikasi usia 18+
-                yang berlaku sesuai ketentuan Roblox.
+                sesuai ketentuan yang berlaku.
               </p>
             </div>
           </div>
 
-          <div className="term-item">
-            <span className="term-number">III</span>
+          <div className="term-row">
+            <span className="term-index">III</span>
             <div>
-              <h3>CHECK YOUR ROBUX LIMIT!</h3>
+              <h3>RECEIVING LIMIT</h3>
               <p>
                 Pastikan akun belum terkena limit dan masih dapat
                 menerima Robux.
@@ -326,10 +367,10 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="term-item">
-            <span className="term-number">IV</span>
+          <div className="term-row">
+            <span className="term-index">IV</span>
             <div>
-              <h3>DOUBLE CHECK YOUR DATA!</h3>
+              <h3>DOUBLE CHECK YOUR DATA</h3>
               <p>
                 Pastikan Username dan Display Name sudah tepat.
                 Tidak ada refund jika Robux sudah berhasil masuk.
@@ -337,38 +378,43 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="terms-bottom">
-            💛 Dengan melakukan pemesanan, pelanggan dianggap telah
-            membaca dan memahami ketentuan di atas.
+          <div className="terms-warning">
+            ⚠️ Pastikan semua informasi benar sebelum pesanan diproses.
           </div>
         </div>
 
-        <div className="shop-info">
-          <div className="shop-info-card clean">
-            <span>✨</span>
+        <div className="store-badges">
+          <div className="store-badge">
+            <span>✦</span>
             <div>
               <strong>ROBUX CLEAN</strong>
-              <small>ROBUX STORE INFORMATION</small>
+              <small>STORE INFORMATION</small>
             </div>
           </div>
-
-          <div className="shop-info-card payment">
-            <span>💳</span>
+          <div className="store-badge">
+            <span>▣</span>
             <div>
-              <strong>PAYMENT OPTIONS</strong>
-              <small>AVAILABLE REKBER N AVAIL QRIS</small>
+              <strong>REKBER AVAILABLE</strong>
+              <small>SAFE TRANSACTION OPTION</small>
+            </div>
+          </div>
+          <div className="store-badge">
+            <span>QR</span>
+            <div>
+              <strong>QRIS AVAILABLE</strong>
+              <small>EASY PAYMENT</small>
             </div>
           </div>
         </div>
       </section>
 
       <footer className="footer">
-        <a href="#" className="logo">
-          <span className="logo-icon">R$</span>
-          <span>REI <b>ROBUX</b></span>
+        <a href="#" className="brand">
+          <span className="brand-icon">R$</span>
+          <span>REI<span className="brand-highlight">ROBUX</span></span>
         </a>
-        <p>Made for happy gaming adventures! 🎮</p>
-        <span className="footer-copy">© 2026 REI ROBUX. ALL RIGHTS RESERVED.</span>
+        <p>GAME HARD. PLAY HAPPY. LEVEL UP. ★</p>
+        <span>© 2026 REI ROBUX — ALL RIGHTS RESERVED.</span>
       </footer>
     </main>
   );
