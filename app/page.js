@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -29,21 +28,73 @@ export default function Home() {
   const [username, setUsername] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [availableStock, setAvailableStock] = useState(null);
+  const [store, setStore] = useState(null);
 
+  // Mengambil stok Robux.
   useEffect(() => {
     let active = true;
+
     fetch("/api/stock", { cache: "no-store" })
-      .then((response) => response.ok ? response.json() : Promise.reject())
-      .then((data) => { if (active) setAvailableStock(Number(data.available_stock)); })
-      .catch(() => { if (active) setAvailableStock(null); });
-    return () => { active = false; };
+      .then((response) =>
+        response.ok ? response.json() : Promise.reject()
+      )
+      .then((data) => {
+        if (active) {
+          setAvailableStock(Number(data.available_stock));
+        }
+      })
+      .catch(() => {
+        if (active) setAvailableStock(null);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // Mengambil dan memperbarui status toko setiap 15 detik.
+  useEffect(() => {
+    let active = true;
+
+    async function loadStoreStatus() {
+      try {
+        const response = await fetch("/api/store", {
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          throw new Error("Gagal mengambil status toko");
+        }
+
+        const data = await response.json();
+
+        if (active) setStore(data);
+      } catch {
+        if (active) setStore(null);
+      }
+    }
+
+    loadStoreStatus();
+
+    const intervalId = setInterval(loadStoreStatus, 15000);
+
+    return () => {
+      active = false;
+      clearInterval(intervalId);
+    };
   }, []);
 
   const isCustom = custom.trim() !== "";
   const amount = isCustom ? Number(custom) : selected;
+
   const validAmount =
-    Number.isSafeInteger(amount) && amount > 0 && amount <= 100000;
-  const total = validAmount ? Math.ceil((amount / 100) * RATE) : 0;
+    Number.isSafeInteger(amount) &&
+    amount > 0 &&
+    amount <= 100000;
+
+  const total = validAmount
+    ? Math.ceil((amount / 100) * RATE)
+    : 0;
 
   function selectPackage(value) {
     setSelected(value);
@@ -51,27 +102,49 @@ export default function Home() {
   }
 
   async function orderNow() {
+    if (!store) {
+      alert("Status toko belum bisa diperiksa. Silakan refresh halaman.");
+      return;
+    }
+
+    if (!store.is_open) {
+      alert(
+        store.closed_message ||
+          "Maaf, toko sedang tutup. Silakan kembali lagi nanti."
+      );
+      return;
+    }
+
     if (!validAmount || !username.trim() || !displayName.trim()) {
-      alert("Lengkapi username, display name, dan nominal Robux dulu ya!");
+      alert(
+        "Lengkapi username, display name, dan nominal Robux dulu ya!"
+      );
       return;
     }
 
     if (availableStock === null || amount > availableStock) {
-      alert("Stok belum bisa dipastikan atau jumlah Robux melebihi stok tersedia. Silakan refresh halaman.");
+      alert(
+        "Stok belum bisa dipastikan atau jumlah Robux melebihi stok tersedia. Silakan refresh halaman."
+      );
       return;
     }
 
-    // Open the tab before awaiting the API so the browser does not block WhatsApp.
+    // Membuka tab sebelum menunggu respons API WhatsApp.
     const whatsappWindow = window.open("about:blank", "_blank");
+
     if (!whatsappWindow) {
-      alert("Izinkan pop-up untuk melanjutkan pesanan melalui WhatsApp.");
+      alert(
+        "Izinkan pop-up untuk melanjutkan pesanan melalui WhatsApp."
+      );
       return;
     }
 
     try {
       const response = await fetch("/api/orders", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         cache: "no-store",
         body: JSON.stringify({
           username: username.trim(),
@@ -79,7 +152,9 @@ export default function Home() {
           robux_amount: amount,
         }),
       });
+
       const data = await response.json();
+
       if (!response.ok) {
         throw new Error(data.error || "Pesanan gagal disimpan.");
       }
@@ -102,12 +177,68 @@ export default function Home() {
         `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
     } catch (error) {
       whatsappWindow.close();
-      alert(error.message || "Pesanan gagal disimpan. Silakan coba lagi.");
+
+      alert(
+        error.message ||
+          "Pesanan gagal disimpan. Silakan coba lagi."
+      );
     }
   }
 
   return (
     <main>
+      {/* NOTIFIKASI STATUS TOKO */}
+      {store && (
+        <div
+          role="status"
+          aria-live="polite"
+          style={{
+            background: store.is_open ? "#15803d" : "#b91c1c",
+            color: "#ffffff",
+            padding: "14px 16px",
+            textAlign: "center",
+            fontWeight: 800,
+            position: "relative",
+            zIndex: 10,
+          }}
+        >
+          <div style={{ fontSize: "16px" }}>
+            {store.is_open
+              ? "🟢 TOKO SEDANG BUKA"
+              : "🔴 TOKO SEDANG TUTUP"}
+          </div>
+
+          <div
+            style={{
+              fontSize: "13px",
+              marginTop: "4px",
+              fontWeight: 500,
+            }}
+          >
+            {store.is_open
+              ? "Silakan lakukan pemesanan sekarang!"
+              : store.closed_message ||
+                "Maaf, toko sedang tutup. Silakan kembali lagi nanti."}
+          </div>
+        </div>
+      )}
+
+      {!store && (
+        <div
+          role="status"
+          aria-live="polite"
+          style={{
+            background: "#374151",
+            color: "#ffffff",
+            padding: "12px 16px",
+            textAlign: "center",
+            fontWeight: 700,
+          }}
+        >
+          MEMERIKSA STATUS TOKO...
+        </div>
+      )}
+
       <div className="race-top">
         <span>🏁 REI ROBUX RACING CLUB</span>
         <span>★ FAST CHECKOUT ★ GOOD VIBES ★</span>
@@ -117,7 +248,9 @@ export default function Home() {
       <nav className="navbar">
         <a href="#" className="brand">
           <span className="brand-mark">R!</span>
-          <span>REI<span className="brand-blue">ROBUX</span></span>
+          <span>
+            REI<span className="brand-blue">ROBUX</span>
+          </span>
         </a>
 
         <div className="nav-links">
@@ -126,7 +259,9 @@ export default function Home() {
           <a href="#rules">RULES</a>
         </div>
 
-        <a href="#packages" className="nav-cta">LET'S RACE ↗</a>
+        <a href="#packages" className="nav-cta">
+          LET'S RACE ↗
+        </a>
       </nav>
 
       <section className="hero">
@@ -164,22 +299,28 @@ export default function Home() {
 
           <div className="car-scene">
             <div className="car-cloud">☁</div>
+
             <div className="race-car">
               <div className="car-window"></div>
+
               <div className="car-body">
                 <span>REI</span>
                 <b>09</b>
               </div>
+
               <div className="wheel wheel-left"></div>
               <div className="wheel wheel-right"></div>
             </div>
+
             <div className="car-shadow"></div>
           </div>
 
           <div className="visual-sticker sticker-fast">FAST!</div>
           <div className="visual-sticker sticker-go">LET'S GO!</div>
           <div className="visual-checker"></div>
-          <div className="visual-caption">FULL SPEED • FULL FUN</div>
+          <div className="visual-caption">
+            FULL SPEED • FULL FUN
+          </div>
         </div>
       </section>
 
@@ -192,20 +333,32 @@ export default function Home() {
 
       <section className="public-stock-banner" aria-live="polite">
         <div>
-          <span className="public-stock-kicker">🏁 LIVE ROBUX INVENTORY</span>
+          <span className="public-stock-kicker">
+            🏁 LIVE ROBUX INVENTORY
+          </span>
+
           <h2>STOK ROBUX TERSEDIA</h2>
           <p>Periksa persediaan sebelum memilih paket.</p>
         </div>
+
         <strong>
           {availableStock === null
             ? "STOK BELUM TERSEDIA"
-            : `${new Intl.NumberFormat("id-ID").format(availableStock)} R`}
+            : `${new Intl.NumberFormat("id-ID").format(
+                availableStock
+              )} R`}
         </strong>
       </section>
 
       <section className="packages-section" id="packages">
-        <div className="section-kicker">01 / CHOOSE YOUR PACKAGE</div>
-        <h2>PICK YOUR <span>ROBUX!</span></h2>
+        <div className="section-kicker">
+          01 / CHOOSE YOUR PACKAGE
+        </div>
+
+        <h2>
+          PICK YOUR <span>ROBUX!</span>
+        </h2>
+
         <p className="section-subtitle">
           Choose your package and get ready to roll.
         </p>
@@ -217,7 +370,9 @@ export default function Home() {
               type="button"
               onClick={() => selectPackage(item.amount)}
               className={`package-card ${item.color} ${
-                selected === item.amount && !isCustom ? "active" : ""
+                selected === item.amount && !isCustom
+                  ? "active"
+                  : ""
               }`}
             >
               <div className="package-top">
@@ -226,16 +381,27 @@ export default function Home() {
               </div>
 
               {item.amount === 100 && (
-                <span className="best-tag">★ BEST SELLER</span>
+                <span className="best-tag">
+                  ★ BEST SELLER
+                </span>
               )}
 
               <div className="package-icon">R</div>
-              <div className="package-amount">{item.amount}</div>
-              <div className="package-unit">ROBUX</div>
-              <div className="package-price">
-                {rupiah(Math.ceil((item.amount / 100) * RATE))}
+              <div className="package-amount">
+                {item.amount}
               </div>
-              <div className="package-label">{item.label}</div>
+              <div className="package-unit">ROBUX</div>
+
+              <div className="package-price">
+                {rupiah(
+                  Math.ceil((item.amount / 100) * RATE)
+                )}
+              </div>
+
+              <div className="package-label">
+                {item.label}
+              </div>
+
               <div className="package-select">
                 {selected === item.amount && !isCustom
                   ? "✓ SELECTED"
@@ -247,10 +413,16 @@ export default function Home() {
 
         <div className="custom-card">
           <div className="custom-number">07</div>
+
           <div className="custom-content">
-            <div className="custom-kicker">CUSTOM PIT STOP</div>
+            <div className="custom-kicker">
+              CUSTOM PIT STOP
+            </div>
+
             <h3>YOUR OWN AMOUNT!</h3>
-            <p>Want a different Robux amount? Type it here!</p>
+            <p>
+              Want a different Robux amount? Type it here!
+            </p>
 
             <input
               type="number"
@@ -264,6 +436,7 @@ export default function Home() {
 
             <div className="custom-price">
               <span>YOUR TOTAL PRICE</span>
+
               <strong>
                 {isCustom && validAmount
                   ? rupiah(total)
@@ -283,8 +456,14 @@ export default function Home() {
       </section>
 
       <section className="order-section" id="order">
-        <div className="section-kicker">02 / CHECKOUT ZONE</div>
-        <h2>READY TO <span>ORDER?</span></h2>
+        <div className="section-kicker">
+          02 / CHECKOUT ZONE
+        </div>
+
+        <h2>
+          READY TO <span>ORDER?</span>
+        </h2>
+
         <p className="section-subtitle">
           Fill in your Roblox account details below.
         </p>
@@ -292,13 +471,17 @@ export default function Home() {
         <div className="order-card">
           <div className="order-card-heading">
             <div className="order-icon">🏁</div>
+
             <div>
               <h3>RACER INFORMATION</h3>
               <p>Let's get your order on track!</p>
             </div>
           </div>
 
-          <label htmlFor="username">ROBLOX USERNAME</label>
+          <label htmlFor="username">
+            ROBLOX USERNAME
+          </label>
+
           <input
             id="username"
             value={username}
@@ -306,7 +489,10 @@ export default function Home() {
             placeholder="Your Roblox username"
           />
 
-          <label htmlFor="displayname">DISPLAY NAME</label>
+          <label htmlFor="displayname">
+            DISPLAY NAME
+          </label>
+
           <input
             id="displayname"
             value={displayName}
@@ -317,22 +503,30 @@ export default function Home() {
           <div className="order-summary">
             <div>
               <span>Robux amount</span>
-              <strong>{validAmount ? `${amount} R` : "Not selected"}</strong>
+              <strong>
+                {validAmount ? `${amount} R` : "Not selected"}
+              </strong>
             </div>
+
             <div>
               <span>Payment method</span>
               <strong>QRIS ONLY</strong>
             </div>
+
             <div className="total-row">
               <span>TOTAL PAYMENT</span>
-              <strong>{validAmount ? rupiah(total) : "Rp0"}</strong>
+              <strong>
+                {validAmount ? rupiah(total) : "Rp0"}
+              </strong>
             </div>
           </div>
 
           <div className="payment-info">
             <div className="payment-icon">▦</div>
+
             <div>
               <strong>PAYMENT VIA QRIS</strong>
+
               <p>
                 Contact admin through WhatsApp to receive the QRIS
                 payment code and confirm your payment.
@@ -340,8 +534,16 @@ export default function Home() {
             </div>
           </div>
 
-          <button className="order-button" onClick={orderNow}>
-            PLACE MY ORDER <span>➜</span>
+          <button
+            className="order-button"
+            onClick={orderNow}
+            disabled={!store || !store.is_open}
+          >
+            {!store
+              ? "MEMERIKSA TOKO..."
+              : store.is_open
+                ? <>PLACE MY ORDER <span>➜</span></>
+                : "TOKO SEDANG TUTUP"}
           </button>
 
           <p className="order-footnote">
@@ -351,32 +553,53 @@ export default function Home() {
       </section>
 
       <section className="rules-section" id="rules">
-        <div className="section-kicker">03 / BEFORE THE RACE</div>
-        <h2>RACE <span>RULES.</span></h2>
+        <div className="section-kicker">
+          03 / BEFORE THE RACE
+        </div>
+
+        <h2>
+          RACE <span>RULES.</span>
+        </h2>
 
         <div className="rules-grid">
           <div className="rule-card">
-            <b>01</b><span>🎮</span>
-            <p>Hanya membutuhkan username dan display name.</p>
+            <b>01</b>
+            <span>🎮</span>
+            <p>
+              Hanya membutuhkan username dan display name.
+            </p>
           </div>
+
           <div className="rule-card">
-            <b>02</b><span>🔐</span>
+            <b>02</b>
+            <span>🔐</span>
             <p>Akun wajib sudah verifikasi 18+.</p>
           </div>
+
           <div className="rule-card">
-            <b>03</b><span>📩</span>
-            <p>Pastikan akun belum limit menerima Robux.</p>
+            <b>03</b>
+            <span>📩</span>
+            <p>
+              Pastikan akun belum limit menerima Robux.
+            </p>
           </div>
+
           <div className="rule-card">
-            <b>04</b><span>🏁</span>
-            <p>Pastikan username dan display name benar. Tidak ada refund jika Robux sudah masuk.</p>
+            <b>04</b>
+            <span>🏁</span>
+            <p>
+              Pastikan username dan display name benar.
+              Tidak ada refund jika Robux sudah masuk.
+            </p>
           </div>
         </div>
       </section>
 
       <footer className="footer">
         <div className="footer-checker"></div>
-        <div className="footer-brand">REI<span>ROBUX</span> 🏁</div>
+        <div className="footer-brand">
+          REI<span>ROBUX</span> 🏁
+        </div>
         <p>GOOD VIBES. GREAT RACES. MORE ROBUX.</p>
         <small>© 2026 REI ROBUX RACING CLUB</small>
       </footer>
