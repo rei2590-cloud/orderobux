@@ -18,7 +18,7 @@ export default function AdminPage() {
   async function loadDashboard() {
     const [ordersRes, stockRes] = await Promise.all([
       fetch("/api/admin/orders", { cache: "no-store" }),
-      fetch("/api/stock", { cache: "no-store" }),
+      fetch("/api/admin/stock", { cache: "no-store" }),
     ]);
 
     if (ordersRes.status === 401) {
@@ -193,20 +193,31 @@ export default function AdminPage() {
 
       <section className="admin-stats">
         <div className="admin-stat">
-          <span>STOK TERSEDIA</span>
-          <strong>
-            {formatRobux(stock?.available_stock)} R$
-          </strong>
+          <span>TOTAL ROBUX MASUK</span>
+          <strong>{formatRobux(stock?.total_stock)} R$</strong>
         </div>
-
         <div className="admin-stat">
-          <span>PESANAN MENUNGGU</span>
+          <span>ROBUX TERJUAL</span>
+          <strong>{formatRobux(stock?.sold_stock)} R$</strong>
+        </div>
+        <div className="admin-stat">
+          <span>STOK TERSEDIA</span>
+          <strong>{formatRobux(stock?.available_stock)} R$</strong>
+        </div>
+        <div className="admin-stat">
+          <span>ORDER MENUNGGU</span>
           <strong>{pendingCount}</strong>
         </div>
+      </section>
 
-        <div className="admin-stat">
-          <span>PESANAN SELESAI</span>
-          <strong>{completedCount}</strong>
+      <section className="admin-panel">
+        <h2>📊 LAPORAN PERSEDIAAN ROBUX</h2>
+        <p>Total Robux terjual dihitung dari pesanan berstatus selesai di database.</p>
+        <div className="admin-stock-report">
+          <div><span>Total stok tersedia sepanjang pencatatan</span><strong>{formatRobux(stock?.total_stock)} R$</strong></div>
+          <div><span>Sudah terjual / dikirim</span><strong>{formatRobux(stock?.sold_stock)} R$</strong></div>
+          <div><span>Sisa stok saat ini</span><strong>{formatRobux(stock?.available_stock)} R$</strong></div>
+          <small>Terakhir diperbarui: {stock?.updated_at ? new Date(stock.updated_at).toLocaleString("id-ID") : "-"}</small>
         </div>
       </section>
 
