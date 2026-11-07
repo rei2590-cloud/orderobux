@@ -1335,3 +1335,59 @@ a {
     width: 100%;
   }
 }
+
+
+/* Live Robux stock display */
+.public-stock-banner {
+  max-width: 1100px;
+  margin: 35px auto 0;
+  padding: 22px 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  background: var(--yellow);
+  border: 3px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.public-stock-kicker {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+.public-stock-banner h2 {
+  margin: 6px 0;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 900;
+}
+.public-stock-banner p { margin: 0; font-weight: 700; }
+.public-stock-banner > strong {
+  color: var(--blue);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 900;
+  white-space: nowrap;
+}
+.admin-stock-report {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+.admin-stock-report > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 13px;
+  background: #eef6ff;
+  border: 1px solid #c5d8ed;
+  border-radius: 9px;
+}
+.admin-stock-report strong { color: #1769d2; }
+.admin-stock-report small { color: #667085; }
+@media (max-width: 720px) {
+  .public-stock-banner { margin: 25px 13px 0; padding: 18px; align-items: flex-start; flex-direction: column; }
+}
+@media (min-width: 900px) {
+  .admin-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
