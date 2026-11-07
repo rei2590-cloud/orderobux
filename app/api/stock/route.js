@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
@@ -7,7 +6,7 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   const { data, error } = await supabaseAdmin
     .from("robux_stock")
-    .select("initial_stock, available_stock, updated_at")
+    .select("available_stock, updated_at")
     .eq("id", 1)
     .single();
 
