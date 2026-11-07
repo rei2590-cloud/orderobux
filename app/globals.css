@@ -1,96 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap');
 
-/* =========================================================
-   REI ROBUX — ROBLOX BOYISH KIDCORE
-   Palette: sky blue, royal blue, arcade yellow, soft green
-   ========================================================= */
+import "./globals.css";
 
-:root {
-  --blue: #79d5ff;
-  --blue-light: #dff5ff;
-  --royal: #2878ee;
-  --yellow: #ffe34f;
-  --green: #b9e995;
-  --ink: #202b3d;
-  --paper: #f5fbff;
-  --white: #ffffff;
-  --muted: #64748b;
+export const metadata = {
+  title: "REI ROBUX | Gaming Store",
+  description: "Your next Roblox adventure starts here!",
+};
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="id">
+      <body>{children}</body>
+    </html>
+  );
 }
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 24px;
-}
-
-body {
-  margin: 0;
-  color: var(--ink);
-  background-color: var(--paper);
-  background-image: radial-gradient(#c8e7ff 1.4px, transparent 1.4px);
-  background-size: 22px 22px;
-  font-family: "Nunito", Arial, sans-serif;
-  overflow-x: hidden;
-}
-
-body,
-button,
-input,
-select {
-  font-family: "Nunito", Arial, sans-serif;
-}
-
-button,
-input,
-select {
-  font-size: inherit;
-}
-
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
-}
-
-button {
-  cursor: pointer;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-main {
-  width: 100%;
-  min-height: 100vh;
-  overflow: hidden;
-}
-
-/* TOP ANNOUNCEMENT */
-.top-strip {
-  width: 100%;
-  padding: 11px 16px;
-  color: var(--ink);
-  background: var(--yellow);
-  border-bottom: 3px solid var(--ink);
-  text-align: center;
-  font-family: "Fredoka", sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
-/* NAVIGATION */
-.navbar {
-  width: min(1160px, calc(100% - 40px));
-  min-height: 78px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
