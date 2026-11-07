@@ -50,29 +50,60 @@ export default function Home() {
     setCustom("");
   }
 
-  function orderNow() {
+  async function orderNow() {
     if (!validAmount || !username.trim() || !displayName.trim()) {
       alert("Lengkapi username, display name, dan nominal Robux dulu ya!");
       return;
     }
 
-    const message = [
-      "🏁 HELLO REI ROBUX RACING CLUB!",
-      "",
-      "I WANT TO PLACE AN ORDER!",
-      `Username: ${username}`,
-      `Display Name: ${displayName}`,
-      `Robux: ${amount} R`,
-      `Total: ${rupiah(total)}`,
-      "Payment: QRIS",
-      "",
-      "Please help me with my order. Thank you!",
-    ].join("\n");
+    if (availableStock === null || amount > availableStock) {
+      alert("Stok belum bisa dipastikan atau jumlah Robux melebihi stok tersedia. Silakan refresh halaman.");
+      return;
+    }
 
-    window.open(
-      `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`,
-      "_blank"
-    );
+    // Open the tab before awaiting the API so the browser does not block WhatsApp.
+    const whatsappWindow = window.open("about:blank", "_blank");
+    if (!whatsappWindow) {
+      alert("Izinkan pop-up untuk melanjutkan pesanan melalui WhatsApp.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+        body: JSON.stringify({
+          username: username.trim(),
+          display_name: displayName.trim(),
+          robux_amount: amount,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Pesanan gagal disimpan.");
+      }
+
+      const message = [
+        "🏁 HELLO REI ROBUX RACING CLUB!",
+        "",
+        "I WANT TO PLACE AN ORDER!",
+        `Order ID: #${data.order.id}`,
+        `Username: ${username.trim()}`,
+        `Display Name: ${displayName.trim()}`,
+        `Robux: ${amount} R`,
+        `Total: ${rupiah(total)}`,
+        "Payment: QRIS",
+        "",
+        "Please help me with my order. Thank you!",
+      ].join("\n");
+
+      whatsappWindow.location.href =
+        `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
+    } catch (error) {
+      whatsappWindow.close();
+      alert(error.message || "Pesanan gagal disimpan. Silakan coba lagi.");
+    }
   }
 
   return (
