@@ -4,9 +4,17 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export const dynamic = "force-dynamic";
 
+function dbMessage(error, action) {
+  console.error("[admin/stock]", action, error?.code, error?.message);
+  if (error?.code === "42P01" || error?.code === "PGRST205") {
+    return "Tabel stok atau pesanan belum tersedia. Jalankan SQL dari file supabase/schema.sql di Supabase SQL Editor.";
+  }
+  return action + " (kode " + (error?.code || "unknown") + "): " + (error?.message || "Kesalahan database");
+}
+
 export async function GET() {
   if (!(await isAdmin())) {
-    return NextResponse.json({ error: "Tidak diizinkan" }, { status: 401 });
+    return NextResponse.json({ error: "Sesi admin berakhir. Silakan login kembali." }, { status: 401 });
   }
 
   const [{ data: stock, error: stockError }, { data: completed, error: ordersError }] =
@@ -20,7 +28,7 @@ export async function GET() {
     ]);
 
   if (stockError || ordersError) {
-    return NextResponse.json({ error: "Gagal mengambil laporan stok" }, { status: 500 });
+    return NextResponse.json({ error: dbMessage(stockError || ordersError, "Gagal mengambil laporan stok") }, { status: 500 });
   }
 
   const sold_stock = (completed || []).reduce(
@@ -36,7 +44,7 @@ export async function GET() {
 
 export async function PATCH(request) {
   if (!(await isAdmin())) {
-    return NextResponse.json({ error: "Tidak diizinkan" }, { status: 401 });
+    return NextResponse.json({ error: "Sesi admin berakhir. Silakan login kembali." }, { status: 401 });
   }
 
   try {
@@ -53,7 +61,7 @@ export async function PATCH(request) {
       .eq("status", "completed");
 
     if (ordersError) {
-      return NextResponse.json({ error: "Gagal menghitung penjualan" }, { status: 500 });
+      return NextResponse.json({ error: dbMessage(ordersError, "Gagal menghitung penjualan") }, { status: 500 });
     }
 
     const sold = (completed || []).reduce(
@@ -72,7 +80,7 @@ export async function PATCH(request) {
       .single();
 
     if (error) {
-      return NextResponse.json({ error: "Gagal memperbarui stok. Pastikan baris stok id=1 sudah tersedia." }, { status: 500 });
+      return NextResponse.json({ error: dbMessage(error, "Gagal memperbarui stok") }, { status: 500 });
     }
 
     return NextResponse.json({
