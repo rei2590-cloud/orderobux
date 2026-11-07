@@ -8,14 +8,20 @@ const formatRobux = (value) =>
 async function readJson(response) {
   const raw = await response.text();
   if (!raw) {
-    throw new Error(`Server memberi respons kosong (HTTP ${response.status}). Cek deployment Netlify.`);
+    throw new Error(`Server memberi respons kosong (HTTP ${response.status}). Cek deployment Vercel.`);
   }
   try {
     return JSON.parse(raw);
   } catch {
-    throw new Error(`Server tidak mengirim JSON (HTTP ${response.status}). Cek Netlify Function logs.`);
+    throw new Error(`Server tidak mengirim JSON (HTTP ${response.status}). Cek Vercel Logs.`);
   }
 }
+
+const STATUS_LABEL = {
+  pending: "⏳ MENUNGGU",
+  processing: "🔧 DIPROSES",
+  completed: "✅ SELESAI",
+};
 
 export default function AdminPage() {
   const [password, setPassword] = useState("");
@@ -25,11 +31,16 @@ export default function AdminPage() {
   const [newStock, setNewStock] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [store, setStore] = useState({ is_open: true, closed_message: "" });
+  const [closedMsg, setClosedMsg] = useState("");
+  const [testimonials, setTestimonials] = useState([]);
 
   async function loadDashboard() {
-    const [ordersRes, stockRes] = await Promise.all([
+    const [ordersRes, stockRes, storeRes, testiRes] = await Promise.all([
       fetch("/api/admin/orders", { cache: "no-store" }),
       fetch("/api/admin/stock", { cache: "no-store" }),
+      fetch("/api/store", { cache: "no-store" }).catch(() => null),
+      fetch("/api/admin/testimonials", { cache: "no-store" }).catch(() => null),
     ]);
 
     if (ordersRes.status === 401 || stockRes.status === 401) {
@@ -42,6 +53,20 @@ export default function AdminPage() {
 
     if (!ordersRes.ok) throw new Error(ordersData.error || "Gagal memuat pesanan.");
     if (!stockRes.ok) throw new Error(stockData.error || "Gagal memuat laporan stok.");
+
+    try {
+      if (storeRes?.ok) {
+        const s = await storeRes.json();
+        setStore(s);
+        setClosedMsg(s.closed_message || "");
+      }
+    } catch {}
+    try {
+      if (testiRes?.ok) {
+        const t = await testiRes.json();
+        setTestimonials(t.testimonials || []);
+      }
+    } catch {}
 
     setOrders(ordersData.orders || []);
     setStock(stockData);
@@ -113,6 +138,89 @@ export default function AdminPage() {
     }
   }
 
+  async function setOrderStatus(id, status) {
+    setLoading(true);
+    setMessage("");
+    try {
+      const response = await fetch("/api/admin/order-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+        body: JSON.stringify({ id, status }),
+      });
+      const data = await readJson(response);
+      if (!response.ok) throw new Error(data.error || "Gagal mengubah status.");
+      setMessage(status === "processing" ? "Pesanan ditandai DIPROSES." : "Pesanan dikembalikan ke MENUNGGU.");
+      await loadDashboard();
+    } catch (error) {
+      setMessage(error.message || "Gagal mengubah status.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function saveStore(isOpen) {
+    setLoading(true);
+    setMessage("");
+    try {
+      const response = await fetch("/api/admin/store", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+        body: JSON.stringify({ is_open: isOpen, closed_message: closedMsg }),
+      });
+      const data = await readJson(response);
+      if (!response.ok) throw new Error(data.error || "Gagal menyimpan pengaturan toko.");
+      setStore({ is_open: isOpen, closed_message: closedMsg });
+      setMessage(isOpen ? "Toko sekarang BUKA." : "Toko sekarang TUTUP.");
+    } catch (error) {
+      setMessage(error.message || "Gagal menyimpan pengaturan toko.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function moderateTestimonial(id, approve) {
+    setLoading(true);
+    setMessage("");
+    try {
+      const response = await fetch("/api/admin/testimonials", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+        body: JSON.stringify({ id, is_approved: approve }),
+      });
+      const data = await readJson(response);
+      if (!response.ok) throw new Error(data.error || "Gagal memperbarui testimoni.");
+      await loadDashboard();
+    } catch (error) {
+      setMessage(error.message || "Gagal memperbarui testimoni.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function deleteTestimonial(id) {
+    if (!confirm("Hapus testimoni ini?")) return;
+    setLoading(true);
+    setMessage("");
+    try {
+      const response = await fetch("/api/admin/testimonials", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+        body: JSON.stringify({ id }),
+      });
+      const data = await readJson(response);
+      if (!response.ok) throw new Error(data.error || "Gagal menghapus testimoni.");
+      await loadDashboard();
+    } catch (error) {
+      setMessage(error.message || "Gagal menghapus testimoni.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   async function updateStock(event) {
     event.preventDefault();
     if (!confirm("Yakin ingin mengganti stok tersedia?")) return;
@@ -139,7 +247,10 @@ export default function AdminPage() {
     }
   }
 
-  const pendingCount = orders.filter((order) => order.status === "pending").length;
+  const pendingCount = orders.filter(
+    (order) => order.status === "pending" || order.status === "processing"
+  ).length;
+  const waitingTestimonials = testimonials.filter((t) => !t.is_approved).length;
 
   if (!loggedIn) {
     return (
@@ -187,6 +298,28 @@ export default function AdminPage() {
       </section>
 
       <section className="admin-panel">
+        <h2>🏪 STATUS TOKO</h2>
+        <p>
+          Sekarang toko: <strong>{store.is_open ? "🟢 BUKA" : "🔴 TUTUP"}</strong>. Saat tutup, banner merah tampil di web.
+        </p>
+        <div className="admin-stock-form">
+          <input
+            type="text"
+            maxLength={200}
+            value={closedMsg}
+            onChange={(event) => setClosedMsg(event.target.value)}
+            placeholder="Pesan saat toko tutup (opsional)"
+          />
+          <button disabled={loading} onClick={() => saveStore(!store.is_open)}>
+            {store.is_open ? "TUTUP TOKO" : "BUKA TOKO"}
+          </button>
+          <button disabled={loading} onClick={() => saveStore(store.is_open)}>
+            SIMPAN PESAN
+          </button>
+        </div>
+      </section>
+
+      <section className="admin-panel">
         <h2>📊 LAPORAN PERSEDIAAN ROBUX</h2>
         <p>Total Robux terjual dihitung dari pesanan berstatus selesai di database.</p>
         <div className="admin-stock-report">
@@ -218,10 +351,46 @@ export default function AdminPage() {
                 <div>
                   <strong>@{order.username}</strong>
                   <p>{formatRobux(order.robux_amount)} Robux</p>
-                  <small>{new Date(order.created_at).toLocaleString("id-ID")}</small>
-                  <p className="admin-status">{order.status === "completed" ? "✅ SELESAI" : "⏳ MENUNGGU"}</p>
+                  <small>Kode order: <strong>{String(order.id).slice(0, 8)}</strong> · {new Date(order.created_at).toLocaleString("id-ID")}</small>
+                  <p className="admin-status">{STATUS_LABEL[order.status] || order.status}</p>
                 </div>
-                {order.status === "pending" && <button disabled={loading} onClick={() => completeOrder(order.id)}>PESANAN SELESAI</button>}
+                {(order.status === "pending" || order.status === "processing") && (
+                  <div>
+                    {order.status === "pending" && (
+                      <button disabled={loading} onClick={() => setOrderStatus(order.id, "processing")}>TANDAI DIPROSES</button>
+                    )}
+                    {order.status === "processing" && (
+                      <button disabled={loading} onClick={() => setOrderStatus(order.id, "pending")}>KEMBALI MENUNGGU</button>
+                    )}
+                    <button disabled={loading} onClick={() => completeOrder(order.id)}>PESANAN SELESAI</button>
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section className="admin-panel">
+        <h2>⭐ TESTIMONI ({waitingTestimonials} menunggu persetujuan)</h2>
+        {testimonials.length === 0 ? <p>Belum ada testimoni masuk.</p> : (
+          <div className="admin-order-list">
+            {testimonials.map((t) => (
+              <article className="admin-order" key={t.id}>
+                <div>
+                  <strong>{t.name}</strong> {"⭐".repeat(t.rating)}
+                  <p>{t.message}</p>
+                  <small>{new Date(t.created_at).toLocaleString("id-ID")}</small>
+                  <p className="admin-status">{t.is_approved ? "✅ TAMPIL" : "⏳ MENUNGGU PERSETUJUAN"}</p>
+                </div>
+                <div>
+                  {t.is_approved ? (
+                    <button disabled={loading} onClick={() => moderateTestimonial(t.id, false)}>SEMBUNYIKAN</button>
+                  ) : (
+                    <button disabled={loading} onClick={() => moderateTestimonial(t.id, true)}>SETUJUI</button>
+                  )}
+                  <button disabled={loading} onClick={() => deleteTestimonial(t.id)}>HAPUS</button>
+                </div>
               </article>
             ))}
           </div>
