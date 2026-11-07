@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const RATE = 15500;
 const WHATSAPP = "6287838482178";
@@ -28,6 +28,16 @@ export default function Home() {
   const [custom, setCustom] = useState("");
   const [username, setUsername] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [availableStock, setAvailableStock] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/stock", { cache: "no-store" })
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((data) => { if (active) setAvailableStock(Number(data.available_stock)); })
+      .catch(() => { if (active) setAvailableStock(null); });
+    return () => { active = false; };
+  }, []);
 
   const isCustom = custom.trim() !== "";
   const amount = isCustom ? Number(custom) : selected;
@@ -148,6 +158,178 @@ export default function Home() {
           START YOUR ENGINE ✦ READY SET ROBUX ✦ REI RACING CLUB ✦
         </div>
       </div>
+
+      <section className="public-stock-banner" aria-live="polite">
+        <div>
+          <span className="public-stock-kicker">🏁 LIVE ROBUX INVENTORY</span>
+          <h2>STOK ROBUX TERSEDIA</h2>
+          <p>Periksa persediaan sebelum memilih paket.</p>
+        </div>
+        <strong>
+          {availableStock === null ? "MEMUAT..." : `${new Intl.NumberFormat("id-ID").format(availableStock)} R
+"use client";
+
+import { useEffect, useState } from "react";
+
+const RATE = 15500;
+const WHATSAPP = "6287838482178";
+
+const packages = [
+  { amount: 50, color: "blue", number: "01", label: "STARTER LAP" },
+  { amount: 100, color: "yellow", number: "02", label: "BEST SELLER" },
+  { amount: 200, color: "green", number: "03", label: "TURBO PACK" },
+  { amount: 300, color: "orange", number: "04", label: "SPEED PACK" },
+  { amount: 500, color: "red", number: "05", label: "PRO RACER" },
+  { amount: 1000, color: "purple", number: "06", label: "CHAMPION" },
+];
+
+function rupiah(value) {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+export default function Home() {
+  const [selected, setSelected] = useState(100);
+  const [custom, setCustom] = useState("");
+  const [username, setUsername] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [availableStock, setAvailableStock] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/stock", { cache: "no-store" })
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((data) => { if (active) setAvailableStock(Number(data.available_stock)); })
+      .catch(() => { if (active) setAvailableStock(null); });
+    return () => { active = false; };
+  }, []);
+
+  const isCustom = custom.trim() !== "";
+  const amount = isCustom ? Number(custom) : selected;
+  const validAmount =
+    Number.isSafeInteger(amount) && amount > 0 && amount <= 100000;
+  const total = validAmount ? Math.ceil((amount / 100) * RATE) : 0;
+
+  function selectPackage(value) {
+    setSelected(value);
+    setCustom("");
+  }
+
+  function orderNow() {
+    if (!validAmount || !username.trim() || !displayName.trim()) {
+      alert("Lengkapi username, display name, dan nominal Robux dulu ya!");
+      return;
+    }
+
+    const message = [
+      "🏁 HELLO REI ROBUX RACING CLUB!",
+      "",
+      "I WANT TO PLACE AN ORDER!",
+      `Username: ${username}`,
+      `Display Name: ${displayName}`,
+      `Robux: ${amount} R`,
+      `Total: ${rupiah(total)}`,
+      "Payment: QRIS",
+      "",
+      "Please help me with my order. Thank you!",
+    ].join("\n");
+
+    window.open(
+      `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`,
+      "_blank"
+    );
+  }
+
+  return (
+    <main>
+      <div className="race-top">
+        <span>🏁 REI ROBUX RACING CLUB</span>
+        <span>★ FAST CHECKOUT ★ GOOD VIBES ★</span>
+        <span>EST. 2026</span>
+      </div>
+
+      <nav className="navbar">
+        <a href="#" className="brand">
+          <span className="brand-mark">R!</span>
+          <span>REI<span className="brand-blue">ROBUX</span></span>
+        </a>
+
+        <div className="nav-links">
+          <a href="#packages">PACKAGES</a>
+          <a href="#order">ORDER</a>
+          <a href="#rules">RULES</a>
+        </div>
+
+        <a href="#packages" className="nav-cta">LET'S RACE ↗</a>
+      </nav>
+
+      <section className="hero">
+        <div className="hero-copy">
+          <div className="hero-label">
+            <span>🏎️</span> WELCOME TO THE CLUB
+          </div>
+
+          <h1>
+            READY.
+            <span>SET.</span>
+            <strong>ROBUX!</strong>
+          </h1>
+
+          <p className="hero-description">
+            YO, PLAYER! Welcome to REI ROBUX Racing Club.
+            Pick your Robux, choose your ride, and let's get
+            your next Roblox adventure started!
+          </p>
+
+          <a href="#packages" className="start-button">
+            START YOUR ORDER <span>➜</span>
+          </a>
+
+          <div className="hero-tags">
+            <span>★ ROBUX CLEAN</span>
+            <span>✓ QRIS AVAILABLE</span>
+            <span>🏁 RACE READY</span>
+          </div>
+        </div>
+
+        <div className="race-visual">
+          <div className="speed-lines">/////</div>
+          <div className="race-number">09</div>
+
+          <div className="car-scene">
+            <div className="car-cloud">☁</div>
+            <div className="race-car">
+              <div className="car-window"></div>
+              <div className="car-body">
+                <span>REI</span>
+                <b>09</b>
+              </div>
+              <div className="wheel wheel-left"></div>
+              <div className="wheel wheel-right"></div>
+            </div>
+            <div className="car-shadow"></div>
+          </div>
+
+          <div className="visual-sticker sticker-fast">FAST!</div>
+          <div className="visual-sticker sticker-go">LET'S GO!</div>
+          <div className="visual-checker"></div>
+          <div className="visual-caption">FULL SPEED • FULL FUN</div>
+        </div>
+      </section>
+
+      <div className="race-ticker">
+        <div>
+          🏁 READY SET ROBUX ✦ REI RACING CLUB ✦ GOOD VIBES ONLY ✦
+          START YOUR ENGINE ✦ READY SET ROBUX ✦ REI RACING CLUB ✦
+        </div>
+      </div>
+
+}
+        </strong>
+      </section>
 
       <section className="packages-section" id="packages">
         <div className="section-kicker">01 / CHOOSE YOUR PACKAGE</div>
