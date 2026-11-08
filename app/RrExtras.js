@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -11,10 +12,14 @@ const pill = {
   border: "3px solid #1b2540",
   borderRadius: 14,
   boxShadow: "3px 3px 0 #1b2540",
-  padding: "8px 14px",
+  padding: "12px 6px",
   fontWeight: 800,
   fontSize: 14,
   textDecoration: "none",
+  textAlign: "center",
+  display: "block",
+  width: "100%",
+  boxSizing: "border-box",
 };
 
 export default function RrExtras() {
@@ -55,44 +60,63 @@ export default function RrExtras() {
       <div
         style={{
           position: "fixed",
-          left: 16,
-          bottom: 16,
-          zIndex: 60,
+          left: 12,
+          right: 12,
+          bottom: "calc(12px + env(safe-area-inset-bottom))",
+          zIndex: 9999,
           display: "flex",
-          gap: 8,
-          flexWrap: "wrap",
+          flexDirection: "column",
+          gap: 10,
+          maxWidth: 480,
+          margin: "0 auto",
         }}
       >
-        <a href="/cek-status" style={pill}>📦 Cek Status</a>
-        <a href="/testimoni" style={pill}>⭐ Testimoni</a>
-      </div>
-
-      {WA_NUMBER && (
-        <a
-          href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(
-            "Halo kak, aku mau tanya soal Robux di REI ROBUX."
-          )}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Chat WhatsApp"
+        {/* TOMBOL CEK STATUS & TESTIMONI */}
+        <div
           style={{
-            position: "fixed",
-            right: 16,
-            bottom: 16,
-            zIndex: 60,
-            background: "#25d366",
-            color: "#fff",
-            border: "3px solid #1b2540",
-            borderRadius: 999,
-            boxShadow: "3px 3px 0 #1b2540",
-            padding: "12px 18px",
-            fontWeight: 800,
-            textDecoration: "none",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 10,
           }}
         >
-          💬 Chat WhatsApp
-        </a>
-      )}
+          <a href="/cek-status" style={pill}>
+            📦 Cek Status
+          </a>
+
+          <a href="/testimoni" style={pill}>
+            ⭐ Testimoni
+          </a>
+        </div>
+
+        {/* TOMBOL WHATSAPP */}
+        {WA_NUMBER && (
+          <a
+            href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(
+              "Halo kak, aku mau tanya soal Robux di REI ROBUX."
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Chat WhatsApp"
+            style={{
+              background: "#25d366",
+              color: "#fff",
+              border: "3px solid #1b2540",
+              borderRadius: 999,
+              boxShadow: "3px 3px 0 #1b2540",
+              padding: "14px 16px",
+              fontWeight: 800,
+              fontSize: 16,
+              textDecoration: "none",
+              textAlign: "center",
+              display: "block",
+              width: "100%",
+              boxSizing: "border-box",
+            }}
+          >
+            💬 Chat WhatsApp
+          </a>
+        )}
+      </div>
     </>
   );
 }
