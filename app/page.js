@@ -161,7 +161,7 @@ export default function Home() {
       }
 
       const message = [
-        "🏁 HELLO REI ROBUX RACING CLUB!",
+        "HELLO REI!",
         "",
         "I WANT TO PLACE AN ORDER!",
         `Order ID: #${data.order.id}`,
