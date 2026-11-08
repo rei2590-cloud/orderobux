@@ -1391,3 +1391,385 @@ a {
 @media (min-width: 900px) {
   .admin-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
+
+/* =====================================
+   REI ROBUX - MOBILE RESPONSIVE UPDATE
+   ===================================== */
+
+/* Mencegah halaman melebar ke samping */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 720px) {
+
+  /* TOP BAR */
+  .race-top {
+    padding: 8px 10px;
+    gap: 6px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+
+  /* NAVBAR */
+  .navbar {
+    width: 100%;
+    padding: 12px 15px;
+    gap: 12px;
+  }
+
+  .brand {
+    font-size: 23px;
+    gap: 7px;
+  }
+
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    font-size: 12px;
+  }
+
+  .nav-cta {
+    padding: 9px 11px;
+    font-size: 11px;
+  }
+
+  /* HERO SECTION */
+  .hero {
+    width: auto;
+    min-height: auto;
+    margin: 12px 12px 35px;
+    padding: 28px 18px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 25px;
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  .hero-copy {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .hero-label {
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+
+  .hero h1 {
+    margin: 20px 0 15px;
+    font-size: clamp(54px, 13vw, 76px);
+    line-height: .86;
+    letter-spacing: -2px;
+  }
+
+  .hero-description {
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .start-button {
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 13px 15px;
+    font-size: 18px;
+  }
+
+  .hero-tags {
+    margin-top: 23px;
+    gap: 6px;
+  }
+
+  .hero-tags span {
+    font-size: 10px;
+    padding: 6px 7px;
+  }
+
+  /* RACING CAR */
+  .race-visual {
+    width: 100%;
+    min-height: 265px;
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  .race-number {
+    font-size: 75px;
+  }
+
+  .car-scene {
+    height: 185px;
+  }
+
+  .race-car {
+    transform: scale(.78) rotate(-5deg);
+  }
+
+  .speed-lines {
+    font-size: 48px;
+  }
+
+  .car-cloud {
+    font-size: 38px;
+    right: 12px;
+  }
+
+  .visual-sticker {
+    font-size: 14px;
+    padding: 7px 10px;
+  }
+
+  .sticker-fast {
+    top: 25px;
+    left: 12px;
+  }
+
+  .sticker-go {
+    bottom: 28px;
+    right: 12px;
+  }
+
+  .visual-caption {
+    left: 12px;
+    bottom: 22px;
+    font-size: 10px;
+  }
+
+  /* SECTION SPACING */
+  .packages-section,
+  .order-section,
+  .rules-section {
+    width: 100%;
+    margin: 55px auto;
+    padding: 0 13px;
+  }
+
+  .packages-section h2,
+  .order-section h2,
+  .rules-section h2 {
+    font-size: clamp(38px, 10vw, 53px);
+  }
+
+  .section-subtitle {
+    font-size: 13px;
+    margin-bottom: 25px;
+  }
+
+  /* ROBUX PACKAGES */
+  .package-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .package-card {
+    min-width: 0;
+    padding: 13px 8px;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .package-top {
+    font-size: 10px;
+    letter-spacing: .5px;
+  }
+
+  .package-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 35px;
+    margin-top: 14px;
+  }
+
+  .package-amount {
+    font-size: clamp(35px, 10vw, 47px);
+  }
+
+  .package-unit {
+    font-size: 11px;
+    letter-spacing: 3px;
+  }
+
+  .package-price {
+    font-size: 15px;
+    margin-top: 10px;
+  }
+
+  .package-label {
+    font-size: 10px;
+  }
+
+  .package-select {
+    font-size: 12px;
+    padding: 9px 4px;
+    margin-top: 13px;
+  }
+
+  .best-tag {
+    font-size: 10px;
+  }
+
+  /* CUSTOM PACKAGE */
+  .custom-card {
+    width: 100%;
+    padding: 15px;
+    gap: 12px;
+  }
+
+  .custom-number {
+    font-size: 43px;
+  }
+
+  .custom-content h3 {
+    font-size: 23px;
+  }
+
+  .custom-content p {
+    font-size: 12px;
+  }
+
+  .custom-content input {
+    min-width: 0;
+    font-size: 16px;
+  }
+
+  /* ORDER FORM */
+  .order-card {
+    width: 100%;
+    padding: 19px 14px;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .order-card-heading h3 {
+    font-size: 22px;
+  }
+
+  .order-card input {
+    font-size: 16px;
+    padding: 13px;
+  }
+
+  .order-summary {
+    padding: 12px;
+  }
+
+  .order-summary > div {
+    font-size: 12px;
+  }
+
+  .total-row strong {
+    font-size: 20px;
+  }
+
+  .order-button {
+    font-size: 18px;
+    padding: 14px 8px;
+  }
+
+  /* RULES */
+  .rules-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .rule-card {
+    padding: 14px;
+  }
+
+  .rule-card b {
+    font-size: 22px;
+  }
+
+  /* FOOTER */
+  .footer {
+    padding: 35px 15px 30px;
+  }
+
+  .footer-brand {
+    font-size: 31px;
+  }
+
+  /* SPACE FOR FLOATING BUTTONS */
+  body {
+    padding-bottom: 125px;
+  }
+}
+
+/* EXTRA SMALL PHONES */
+@media (max-width: 390px) {
+
+  .hero {
+    margin: 10px 9px 30px;
+    padding: 23px 14px;
+  }
+
+  .hero h1 {
+    font-size: clamp(49px, 13vw, 62px);
+  }
+
+  .race-visual {
+    min-height: 235px;
+  }
+
+  .race-car {
+    transform: scale(.68) rotate(-5deg);
+  }
+
+  .package-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .package-card {
+    padding: 11px 6px;
+  }
+
+  .package-amount {
+    font-size: 37px;
+  }
+
+  .package-price {
+    font-size: 13px;
+  }
+
+  .nav-links {
+    gap: 10px;
+    font-size: 11px;
+  }
+
+  .custom-card {
+    display: block;
+  }
+
+  .custom-number {
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+}
+
+/* TABLET */
+@media (min-width: 721px) and (max-width: 1024px) {
+
+  .hero {
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 40px 28px;
+    gap: 20px;
+  }
+
+  .hero h1 {
+    font-size: clamp(58px, 7vw, 78px);
+  }
+
+  .package-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
