@@ -236,8 +236,8 @@ export default function Home() {
       </div>
 
       <div className="race-top">
-        <span>🏁 REI ROBUX RACING CLUB</span>
-        <span>★ FAST CHECKOUT ★ GOOD VIBES ★</span>
+        <span>🏁 REI ROBUX</span>
+        <span>★ FAST CHECKOUT ★ CLEAN ROBUX ★</span>
         <span>EST. 2026</span>
       </div>
 
@@ -273,7 +273,7 @@ export default function Home() {
           </h1>
 
           <p className="hero-description">
-            YO, PLAYER! Welcome to REI ROBUX Racing Club.
+            YO, PLAYER! Welcome to REI ROBUX.
             Pick your Robux, choose your ride, and let's get
             your next Roblox adventure started!
           </p>
@@ -322,8 +322,8 @@ export default function Home() {
 
       <div className="race-ticker">
         <div>
-          🏁 READY SET ROBUX ✦ REI RACING CLUB ✦ GOOD VIBES ONLY ✦
-          START YOUR ENGINE ✦ READY SET ROBUX ✦ REI RACING CLUB ✦
+          🏁 READY ROBUX ✦ REI ROBUX ✦ GOOD VIBES ONLY ✦
+          START YOUR ENGINE ✦ READY ROBUX ✦ REI ROBUX ✦
         </div>
       </div>
 
@@ -597,7 +597,7 @@ export default function Home() {
           REI<span>ROBUX</span> 🏁
         </div>
         <p>GOOD VIBES. GREAT RACES. MORE ROBUX.</p>
-        <small>© 2026 REI ROBUX RACING CLUB</small>
+        <small>© 2026 REI ROBUX</small>
       </footer>
     </main>
   );
